@@ -1,0 +1,632 @@
+{% extends "base.html" %}
+
+{% block title %}Stock Sentiment Analyzer - Real-time News Analysis{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Hero Section -->
+    <div class="hero-section text-white py-5">
+        <div class="container">
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-8">
+                    <h1 class="display-3 fw-bold mb-4">
+                        Stock Sentiment Analyzer
+                    </h1>
+                    <p class="lead mb-4">
+                        Analyze stock news sentiment with AI-powered insights
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Section -->
+    <div class="container search-container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body p-5">
+                        <h2 class="text-center mb-4">
+                            <i class="fas fa-search me-2 text-primary"></i>
+                            Search Stock Sentiment
+                        </h2>
+                        
+                        <!-- Search Form -->
+                        <form id="sentimentForm" class="mb-4">
+                            <div class="search-input-container">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text">
+                        <i class="fas fa-search"></i>
+                    </span>
+                    <input type="text"
+                           class="form-control"
+                           id="stockSearch"
+                           placeholder="Enter stock symbol or company name (e.g., AAPL, Apple Inc.)"
+                           autocomplete="off"
+                           data-bs-toggle="dropdown"
+                           data-bs-auto-close="false">
+                    <button class="btn btn-primary" type="button" id="analyzeBtn" onclick="testSentimentAnalysis()">
+                        <i class="fas fa-chart-bar me-1"></i>
+                        Analyze Sentiment
+                    </button>
+                    <button class="btn btn-outline-secondary ms-2" type="button" id="resetBtn" onclick="resetAll()">
+                        <i class="fas fa-redo me-1"></i>
+                        Reset
+                    </button>
+                </div>
+                <!-- Sample stocks dropdown -->
+                <div class="dropdown-menu w-100" id="sampleStocksDropdown">
+                    <h6 class="dropdown-header">Popular Stocks</h6>
+                    <a class="dropdown-item" href="#" data-symbol="AAPL">
+                        <i class="fab fa-apple me-2"></i>Apple Inc. (AAPL)
+                    </a>
+                    <a class="dropdown-item" href="#" data-symbol="MSFT">
+                        <i class="fab fa-microsoft me-2"></i>Microsoft Corporation (MSFT)
+                    </a>
+                    <a class="dropdown-item" href="#" data-symbol="GOOGL">
+                        <i class="fab fa-google me-2"></i>Alphabet Inc. (GOOGL)
+                    </a>
+                    <a class="dropdown-item" href="#" data-symbol="AMZN">
+                        <i class="fab fa-amazon me-2"></i>Amazon.com Inc. (AMZN)
+                    </a>
+                    <a class="dropdown-item" href="#" data-symbol="TSLA">
+                        <i class="fas fa-car me-2"></i>Tesla Inc. (TSLA)
+                    </a>
+                    <a class="dropdown-item" href="#" data-symbol="META">
+                        <i class="fab fa-meta me-2"></i>Meta Platforms Inc. (META)
+                    </a>
+                    <a class="dropdown-item" href="#" data-symbol="NVDA">
+                        <i class="fas fa-microchip me-2"></i>NVIDIA Corporation (NVDA)
+                    </a>
+                    <a class="dropdown-item" href="#" data-symbol="NFLX">
+                        <i class="fas fa-play me-2"></i>Netflix Inc. (NFLX)
+                    </a>
+                </div>
+                                
+                                <!-- Autocomplete Dropdown -->
+                                <div id="autocompleteDropdown" class="autocomplete-dropdown"></div>
+                            </div>
+                        </form>
+
+                        <!-- Loading Spinner -->
+                        <div id="loadingSpinner" class="text-center d-none">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2 text-muted">Analyzing sentiment...</p>
+                        </div>
+
+                        <!-- Progress Bar -->
+                        <div id="progressSection" class="d-none mt-4" style="display: none !important;">
+                            <div class="card results-card">
+                                <div class="card-body text-center p-4">
+                                    <h5 class="card-title mb-3">Analyzing Sentiment</h5>
+                                    <div class="progress mb-3" style="height: 20px; background-color: #f0f0f0;">
+                                        <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-primary" 
+                                             role="progressbar" style="width: 0%; background-color: #007bff !important;"></div>
+                                    </div>
+                                    <p id="progressText" class="text-muted">Initializing analysis...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Results Section -->
+                        <div id="resultsSection" class="d-none mt-4">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="card results-card">
+                                        <div class="card-body text-center p-4">
+                                            <h5 class="card-title mb-3">Overall Sentiment</h5>
+                                            <div id="overallSentiment" class="sentiment-display"></div>
+                                            <div id="confidenceScore" class="confidence-display mt-2"></div>
+                                            
+                                            <!-- Sentiment Meter -->
+                                            <div class="mt-4">
+                                                <h6 class="mb-3">Sentiment Meter</h6>
+                                                <div class="sentiment-meter">
+                                                    <div class="meter-container">
+                                                        <div class="meter-scale">
+                                                            <span class="scale-label negative">Negative</span>
+                                                            <span class="scale-label neutral">Neutral</span>
+                                                            <span class="scale-label positive">Positive</span>
+                                                        </div>
+                                                        <div class="meter-bar">
+                                                            <div id="meterNeedle" class="meter-needle"></div>
+                                                        </div>
+                                                        <div class="meter-value">
+                                                            <span id="meterValue">0%</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card results-card">
+                                        <div class="card-body text-center p-4">
+                                            <h5 class="card-title mb-3">News Analyzed</h5>
+                                            <div id="newsCount" class="sentiment-display text-primary"></div>
+                                            <div class="confidence-display mt-2">Recent articles</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- News Items -->
+                            <div class="mt-4">
+                                <h4>Recent News Analysis</h4>
+                                <div id="newsItems" class="row"></div>
+                            </div>
+                        </div>
+
+                        <!-- Error Message -->
+                        <div id="errorMessage" class="alert alert-danger d-none" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <span id="errorText"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('stockSearch');
+    const autocompleteDropdown = document.getElementById('autocompleteDropdown');
+    const sampleStocksDropdown = document.getElementById('sampleStocksDropdown');
+    const sentimentForm = document.getElementById('sentimentForm');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const resultsSection = document.getElementById('resultsSection');
+    const progressSection = document.getElementById('progressSection');
+    const errorMessage = document.getElementById('errorMessage');
+    
+    let searchTimeout;
+    
+    // Show sample stocks when clicking on search input
+    searchInput.addEventListener('focus', function() {
+        if (this.value.trim() === '') {
+            sampleStocksDropdown.style.display = 'block';
+        }
+    });
+    
+    // Hide sample stocks when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!searchInput.contains(e.target) && !sampleStocksDropdown.contains(e.target)) {
+            sampleStocksDropdown.style.display = 'none';
+        }
+    });
+    
+    // Handle sample stock selection
+    sampleStocksDropdown.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (e.target.classList.contains('dropdown-item')) {
+            const symbol = e.target.dataset.symbol;
+            searchInput.value = symbol;
+            sampleStocksDropdown.style.display = 'none';
+            showNewsOnly(symbol);
+        }
+    });
+    
+    // Search input with autocomplete (faster)
+    searchInput.addEventListener('input', function() {
+        const query = this.value.trim();
+        
+        clearTimeout(searchTimeout);
+        
+        // Hide sample stocks when typing
+        sampleStocksDropdown.style.display = 'none';
+        
+        if (query.length < 1) {
+            autocompleteDropdown.style.display = 'none';
+            return;
+        }
+        
+        searchTimeout = setTimeout(() => {
+            fetch(`/api/search_stocks?q=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    displayAutocomplete(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching autocomplete:', error);
+                });
+        }, 150); // Faster response time
+    });
+    
+    function displayAutocomplete(results) {
+        if (results.length === 0) {
+            autocompleteDropdown.style.display = 'none';
+            return;
+        }
+        
+        autocompleteDropdown.innerHTML = results.map(stock => `
+            <div class="autocomplete-item" data-symbol="${stock.symbol}">
+                <strong>${stock.symbol}</strong> - ${stock.name}
+            </div>
+        `).join('');
+        
+        autocompleteDropdown.style.display = 'block';
+        
+        // Add click handlers
+        autocompleteDropdown.querySelectorAll('.autocomplete-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const symbol = this.dataset.symbol;
+                searchInput.value = symbol;
+                autocompleteDropdown.style.display = 'none';
+                showNewsOnly(symbol); // Show news immediately on click
+            });
+        });
+    }
+    
+    // Hide autocomplete when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!searchInput.contains(e.target) && !autocompleteDropdown.contains(e.target)) {
+            autocompleteDropdown.style.display = 'none';
+        }
+    });
+    
+    // Form submission (prevent default form behavior)
+    sentimentForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        testSentimentAnalysis();
+    });
+    
+    // Test function to verify elements exist
+    function testElements() {
+        console.log('Testing elements...');
+        console.log('progressSection:', document.getElementById('progressSection'));
+        console.log('progressBar:', document.getElementById('progressBar'));
+        console.log('progressText:', document.getElementById('progressText'));
+        console.log('overallSentiment:', document.getElementById('overallSentiment'));
+        console.log('confidenceScore:', document.getElementById('confidenceScore'));
+        console.log('newsCount:', document.getElementById('newsCount'));
+    }
+    
+    // Update sentiment meter
+    function updateSentimentMeter(sentiment, confidence) {
+        const meterNeedle = document.getElementById('meterNeedle');
+        const meterValue = document.getElementById('meterValue');
+        
+        if (!meterNeedle || !meterValue) return;
+        
+        let position = 50; // Default to center (neutral)
+        let value = 0;
+        
+        if (sentiment === 'Positive') {
+            position = 50 + (confidence * 50); // 50% to 100%
+            value = Math.round(confidence * 100);
+        } else if (sentiment === 'Negative') {
+            position = 50 - (confidence * 50); // 0% to 50%
+            value = Math.round(confidence * 100);
+        } else {
+            position = 50; // Center
+            value = Math.round(confidence * 100);
+        }
+        
+        // Ensure position is within bounds
+        position = Math.max(0, Math.min(100, position));
+        
+        meterNeedle.style.left = position + '%';
+        meterValue.textContent = value + '%';
+        
+        console.log('Meter updated:', sentiment, confidence, position + '%');
+    }
+    
+    // Run test after page loads
+    setTimeout(testElements, 1000);
+    
+    // Analyze sentiment function
+    window.testSentimentAnalysis = function() {
+        const symbol = searchInput.value.trim();
+        console.log('Analyze sentiment triggered for:', symbol);
+        
+        if (!symbol) {
+            showError('Please enter a stock symbol or company name');
+            return;
+        }
+        
+        // Extract symbol from query (assume first word is symbol if it looks like one)
+        const extractedSymbol = symbol.split(' ')[0].toUpperCase();
+        console.log('Extracted symbol:', extractedSymbol);
+        analyzeSentiment(extractedSymbol);
+    };
+    
+    // Reset all function
+    window.resetAll = function() {
+        console.log('Resetting all...');
+        
+        // Clear search input
+        searchInput.value = '';
+        
+        // Hide all sections
+        resultsSection.classList.add('d-none');
+        progressSection.style.display = 'none';
+        progressSection.classList.add('d-none');
+        errorMessage.classList.add('d-none');
+        
+        // Hide dropdowns
+        autocompleteDropdown.style.display = 'none';
+        sampleStocksDropdown.style.display = 'none';
+        
+        // Reset button state
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        analyzeBtn.disabled = false;
+        analyzeBtn.innerHTML = '<i class="fas fa-chart-bar me-1"></i>Analyze Sentiment';
+        
+        // Reset progress bar
+        const progressBar = document.getElementById('progressBar');
+        if (progressBar) {
+            progressBar.style.width = '0%';
+        }
+        
+        // Reset meter
+        const meterNeedle = document.getElementById('meterNeedle');
+        const meterValue = document.getElementById('meterValue');
+        if (meterNeedle) {
+            meterNeedle.style.left = '50%';
+        }
+        if (meterValue) {
+            meterValue.textContent = '0%';
+        }
+        
+        // Clear news items
+        const newsItemsContainer = document.getElementById('newsItems');
+        if (newsItemsContainer) {
+            newsItemsContainer.innerHTML = '';
+        }
+        
+        console.log('Reset complete');
+    };
+    
+    // Add click handler for autocomplete items to show news immediately
+    function showNewsOnly(symbol) {
+        // Show loading state
+        loadingSpinner.classList.remove('d-none');
+        resultsSection.classList.add('d-none');
+        errorMessage.classList.add('d-none');
+        
+        fetch('/api/analyze_sentiment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ symbol: symbol })
+        })
+        .then(response => response.json())
+        .then(data => {
+            loadingSpinner.classList.add('d-none');
+            
+            if (data.error) {
+                showError(data.error);
+                return;
+            }
+            
+            // Show only news, not sentiment
+            displayNewsOnly(data);
+        })
+        .catch(error => {
+            loadingSpinner.classList.add('d-none');
+            showError('An error occurred while fetching news. Please try again.');
+            console.error('Error:', error);
+        });
+    }
+    
+    function displayNewsOnly(data) {
+        // Hide sentiment results, show only news
+        const newsItemsContainer = document.getElementById('newsItems');
+        if (data.news_items && data.news_items.length > 0) {
+            newsItemsContainer.innerHTML = data.news_items.map(item => `
+                <div class="col-md-6 mb-4">
+                    <div class="card news-card h-100">
+                        <div class="card-body p-4">
+                            <h6 class="card-title fw-bold mb-3">${item.title}</h6>
+                            <p class="card-text text-muted mb-3">${item.summary.substring(0, 120)}...</p>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="badge bg-secondary px-3 py-2">
+                                    News
+                                </span>
+                                <small class="text-muted">${item.publisher}</small>
+                            </div>
+                            ${item.link ? `<a href="${item.link}" target="_blank" class="btn btn-outline-primary btn-sm">Read More</a>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            newsItemsContainer.innerHTML = '<div class="col-12"><p class="text-muted text-center">No news items found for this symbol.</p></div>';
+        }
+        
+        // Show results section but hide sentiment
+        resultsSection.classList.remove('d-none');
+        document.querySelector('.row .col-md-6:first-child').style.display = 'none'; // Hide sentiment card
+        
+        // Don't clear search input - keep the stock name visible
+        autocompleteDropdown.style.display = 'none';
+    }
+    
+    function analyzeSentiment(symbol) {
+        console.log('Starting sentiment analysis for:', symbol);
+        
+        // Show progress bar
+        progressSection.style.display = 'block';
+        progressSection.classList.remove('d-none');
+        resultsSection.classList.add('d-none');
+        errorMessage.classList.add('d-none');
+        
+        console.log('Progress section shown');
+        
+        // Reset button state
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        analyzeBtn.disabled = true;
+        analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Analyzing...';
+        
+        // Simulate progress
+        let progress = 0;
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        
+        console.log('Progress elements:', progressBar, progressText);
+        
+        const progressInterval = setInterval(() => {
+            progress += Math.random() * 15;
+            if (progress > 90) progress = 90;
+            if (progressBar) {
+                progressBar.style.width = progress + '%';
+            }
+            
+            if (progressText) {
+                if (progress < 30) {
+                    progressText.textContent = 'Fetching news articles...';
+                } else if (progress < 60) {
+                    progressText.textContent = 'Analyzing sentiment...';
+                } else {
+                    progressText.textContent = 'Processing results...';
+                }
+            }
+        }, 200);
+        
+        fetch('/api/analyze_sentiment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ symbol: symbol })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Received data:', data);
+            
+            // Complete progress
+            clearInterval(progressInterval);
+            if (progressBar) {
+                progressBar.style.width = '100%';
+            }
+            if (progressText) {
+                progressText.textContent = 'Analysis complete!';
+            }
+            
+            setTimeout(() => {
+                // Reset button state
+                analyzeBtn.disabled = false;
+                analyzeBtn.innerHTML = '<i class="fas fa-chart-bar me-1"></i>Analyze Sentiment';
+                progressSection.style.display = 'none';
+                progressSection.classList.add('d-none');
+                
+                if (data.error) {
+                    console.log('Error in data:', data.error);
+                    showError(data.error);
+                    return;
+                }
+                
+                console.log('Displaying results...');
+                displayResults(data);
+            }, 500);
+        })
+        .catch(error => {
+            clearInterval(progressInterval);
+            
+            // Reset button state
+            analyzeBtn.disabled = false;
+            analyzeBtn.innerHTML = '<i class="fas fa-chart-bar me-1"></i>Analyze Sentiment';
+            progressSection.style.display = 'none';
+            progressSection.classList.add('d-none');
+            
+            showError('An error occurred while analyzing sentiment. Please try again.');
+            console.error('Error:', error);
+        });
+    }
+    
+    function displayResults(data) {
+        console.log('displayResults called with:', data);
+        
+        // Show sentiment results (only after button click)
+        const sentimentCard = document.querySelector('.row .col-md-6:first-child');
+        if (sentimentCard) {
+            sentimentCard.style.display = 'block'; // Show sentiment card
+        }
+        
+        // Update overall sentiment
+        const sentimentElement = document.getElementById('overallSentiment');
+        const confidenceElement = document.getElementById('confidenceScore');
+        const newsCountElement = document.getElementById('newsCount');
+        
+        console.log('Elements found:', sentimentElement, confidenceElement, newsCountElement);
+        
+        if (sentimentElement) {
+            sentimentElement.textContent = data.overall_sentiment || 'Neutral';
+            sentimentElement.className = `sentiment-display ${getSentimentColor(data.overall_sentiment)}`;
+        }
+        
+        if (confidenceElement) {
+            confidenceElement.textContent = `Confidence: ${((data.confidence || 0) * 100).toFixed(1)}%`;
+        }
+        
+        if (newsCountElement) {
+            newsCountElement.textContent = data.news_count || 0;
+        }
+        
+        // Update sentiment meter
+        updateSentimentMeter(data.overall_sentiment, data.confidence);
+        
+        // Display news items with sentiment
+        const newsItemsContainer = document.getElementById('newsItems');
+        if (data.news_items && data.news_items.length > 0) {
+            newsItemsContainer.innerHTML = data.news_items.map(item => `
+                <div class="col-md-6 mb-4">
+                    <div class="card news-card h-100">
+                        <div class="card-body p-4">
+                            <h6 class="card-title fw-bold mb-3">${item.title}</h6>
+                            <p class="card-text text-muted mb-3">${item.summary.substring(0, 120)}...</p>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="badge ${getSentimentBadgeColor(item.sentiment)} px-3 py-2">
+                                    ${item.sentiment}
+                                </span>
+                                <small class="text-muted">${item.publisher}</small>
+                            </div>
+                            ${item.link ? `<a href="${item.link}" target="_blank" class="btn btn-outline-primary btn-sm">Read More</a>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            newsItemsContainer.innerHTML = '<div class="col-12"><p class="text-muted text-center">No news items found for this symbol.</p></div>';
+        }
+        
+        // Show results section
+        resultsSection.classList.remove('d-none');
+        
+        // Don't clear search input - keep the stock name visible
+        autocompleteDropdown.style.display = 'none';
+    }
+    
+    function showError(message) {
+        document.getElementById('errorText').textContent = message;
+        errorMessage.classList.remove('d-none');
+    }
+    
+    function getSentimentColor(sentiment) {
+        switch(sentiment.toLowerCase()) {
+            case 'positive': return 'text-success';
+            case 'negative': return 'text-danger';
+            case 'neutral': return 'text-warning';
+            default: return 'text-muted';
+        }
+    }
+    
+    function getSentimentBadgeColor(sentiment) {
+        switch(sentiment.toLowerCase()) {
+            case 'positive': return 'bg-success';
+            case 'negative': return 'bg-danger';
+            case 'neutral': return 'bg-warning text-dark';
+            default: return 'bg-secondary';
+        }
+    }
+});
+</script>
+{% endblock %}

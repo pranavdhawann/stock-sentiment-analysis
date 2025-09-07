@@ -1,0 +1,46 @@
+runtime: python38
+
+# App Engine configuration
+env_variables:
+  FLASK_ENV: production
+
+# Automatic scaling configuration
+automatic_scaling:
+  min_instances: 1
+  max_instances: 10
+  target_cpu_utilization: 0.6
+
+# Health check configuration
+readiness_check:
+  path: "/health"
+  check_interval_sec: 5
+  timeout_sec: 4
+  failure_threshold: 2
+  success_threshold: 2
+
+liveness_check:
+  path: "/health"
+  check_interval_sec: 30
+  timeout_sec: 4
+  failure_threshold: 2
+  success_threshold: 2
+
+# Network configuration
+network:
+  forwarded_ports:
+    - 8080
+
+# Skip files that don't need to be deployed
+skip_files:
+  - ^(.*/)?#.*#$
+  - ^(.*/)?.*~$
+  - ^(.*/)?.*\.py[co]$
+  - ^(.*/)?.*/RCS/.*$
+  - ^(.*/)?\..*$
+  - ^(.*/)?node_modules/.*$
+  - ^(.*/)?__pycache__/.*$
+  - ^(.*/)?\.git/.*$
+  - ^(.*/)?\.gitignore$
+  - ^(.*/)?README\.md$
+  - ^(.*/)?Dockerfile$
+  - ^(.*/)?cloudbuild\.yaml$
