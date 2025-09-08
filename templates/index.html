@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Stock Sentiment Analyzer - Real-time News Analysis{% endblock %}
+{% block title %}InfoEdge - Real-time News Analysis{% endblock %}
 
 {% block content %}
 <div class="container-fluid">
@@ -9,11 +9,11 @@
         <div class="container">
             <div class="row justify-content-center text-center">
                 <div class="col-lg-8">
-                    <h1 class="display-3 fw-bold mb-4">
-                        Stock Sentiment Analyzer
+                    <h1 class="text-5xl font-extrabold mb-4">
+                        InfoEdge
                     </h1>
-                    <p class="lead mb-4">
-                        Analyze stock news sentiment with AI-powered insights
+                    <p class="text-lg text-gray-200 mt-2 mb-5">
+                        See beyond the headlines — real-time sentiment for smarter trades.
                     </p>
                 </div>
             </div>
@@ -24,16 +24,11 @@
     <div class="container search-container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <div class="card">
-                    <div class="card-body p-5">
-                        <h2 class="text-center mb-4">
-                            <i class="fas fa-search me-2 text-primary"></i>
-                            Search Stock Sentiment
-                        </h2>
-                        
-                        <!-- Search Form -->
+                 <div class="card card-enhanced">
+                     <div class="card-body p-4">
+                         <!-- Search Form -->
                         <form id="sentimentForm" class="mb-4">
-                            <div class="search-input-container">
+                            <div class="search-box-enhanced">
                 <div class="input-group input-group-lg">
                     <span class="input-group-text">
                         <i class="fas fa-search"></i>
@@ -41,18 +36,10 @@
                     <input type="text"
                            class="form-control"
                            id="stockSearch"
-                           placeholder="Enter stock symbol or company name (e.g., AAPL, Apple Inc.)"
+                           placeholder="Enter stock symbol or company name (e.g., AAPL, TSLA)"
                            autocomplete="off"
                            data-bs-toggle="dropdown"
                            data-bs-auto-close="false">
-                    <button class="btn btn-primary" type="button" id="analyzeBtn" onclick="testSentimentAnalysis()">
-                        <i class="fas fa-chart-bar me-1"></i>
-                        Analyze Sentiment
-                    </button>
-                    <button class="btn btn-outline-secondary ms-2" type="button" id="resetBtn" onclick="resetAll()">
-                        <i class="fas fa-redo me-1"></i>
-                        Reset
-                    </button>
                 </div>
                 <!-- Sample stocks dropdown -->
                 <div class="dropdown-menu w-100" id="sampleStocksDropdown">
@@ -112,8 +99,9 @@
 
                         <!-- Results Section -->
                         <div id="resultsSection" class="d-none mt-4">
-                            <div class="row">
-                                <div class="col-md-6">
+                            <!-- Sentiment Meter and Stock Chart Side by Side -->
+                            <div class="row mb-4 equal-height">
+                                <div class="col-md-4">
                                     <div class="card results-card">
                                         <div class="card-body text-center p-4">
                                             <h5 class="card-title mb-3">Overall Sentiment</h5>
@@ -126,38 +114,65 @@
                                                 <div class="sentiment-meter">
                                                     <div class="meter-container">
                                                         <div class="meter-scale">
-                                                            <span class="scale-label negative">Negative</span>
-                                                            <span class="scale-label neutral">Neutral</span>
-                                                            <span class="scale-label positive">Positive</span>
+                                                            <!-- Labels removed for cleaner look -->
                                                         </div>
-                                                        <div class="meter-bar">
-                                                            <div id="meterNeedle" class="meter-needle"></div>
-                                                        </div>
-                                                        <div class="meter-value">
-                                                            <span id="meterValue">0%</span>
-                                                        </div>
+                                                         <div class="meter-bar">
+                                                             <div id="meterNeedle" class="meter-needle"></div>
+                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="card results-card">
-                                        <div class="card-body text-center p-4">
-                                            <h5 class="card-title mb-3">News Analyzed</h5>
-                                            <div id="newsCount" class="sentiment-display text-primary"></div>
-                                            <div class="confidence-display mt-2">Recent articles</div>
+                                 <div class="col-md-8">
+                                     <div class="card">
+                                         <div class="card-body">
+                                             <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <h5 id="stockPrice" class="mb-1">$0.00</h5>
+                                                    <span id="priceChange" class="text-muted">+$0.00 (0.00%)</span>
+                                                </div>
+                                                <div class="col-md-6 text-end">
+                                                    <small class="text-muted">Last 30 days</small>
+                                                </div>
+                                            </div>
+                                            <canvas id="priceSentimentChart" width="400" height="200"></canvas>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- News Items -->
-                            <div class="mt-4">
-                                <h4>Recent News Analysis</h4>
-                                <div id="newsItems" class="row"></div>
-                            </div>
+                             <!-- Summarized Insights -->
+                             <div class="mt-4">
+                                 <h4 class="mb-3">
+                                     <i class="fas fa-lightbulb text-warning me-2"></i>
+                                     Summarized Insights
+                                 </h4>
+                                 <div class="card">
+                                     <div class="card-body">
+                                         <div id="insightsContent">
+                                             <!-- Insights will be populated here -->
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+
+                             <!-- News Items -->
+                             <div class="mt-4">
+                                 <div class="d-flex justify-content-between align-items-center mb-3">
+                                     <h4 class="mb-0">Recent News Analysis</h4>
+                                     <div class="scroll-indicator">
+                                         <i class="fas fa-chevron-down text-muted"></i>
+                                         <small class="text-muted ms-1">Scroll for more</small>
+                                     </div>
+                                 </div>
+                                 <div class="card">
+                                     <div class="card-body">
+                                         <div id="newsItems" class="news-container"></div>
+                                     </div>
+                                 </div>
+                             </div>
                         </div>
 
                         <!-- Error Message -->
@@ -170,6 +185,7 @@
             </div>
         </div>
     </div>
+
 
 </div>
 {% endblock %}
@@ -188,9 +204,21 @@ document.addEventListener('DOMContentLoaded', function() {
     
     let searchTimeout;
     
-    // Show sample stocks when clicking on search input
+    // Show sample stocks when clicking on search input and clear existing results
     searchInput.addEventListener('focus', function() {
+        // Clear existing results when focusing on search input
+        autoReset();
+        
         if (this.value.trim() === '') {
+            sampleStocksDropdown.style.display = 'block';
+        }
+    });
+    
+    // Clear search input when clicking on it (if it has a value)
+    searchInput.addEventListener('click', function() {
+        if (this.value.trim() !== '') {
+            this.value = '';
+            autoReset();
             sampleStocksDropdown.style.display = 'block';
         }
     });
@@ -209,7 +237,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const symbol = e.target.dataset.symbol;
             searchInput.value = symbol;
             sampleStocksDropdown.style.display = 'none';
-            showNewsOnly(symbol);
+            analyzeSentiment(symbol);
         }
     });
     
@@ -218,6 +246,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const query = this.value.trim();
         
         clearTimeout(searchTimeout);
+        
+        // Only auto-reset if there are existing results and user is typing a new query
+        if (query.length > 0 && !resultsSection.classList.contains('d-none')) {
+            autoReset();
+        }
         
         // Hide sample stocks when typing
         sampleStocksDropdown.style.display = 'none';
@@ -259,7 +292,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const symbol = this.dataset.symbol;
                 searchInput.value = symbol;
                 autocompleteDropdown.style.display = 'none';
-                showNewsOnly(symbol); // Show news immediately on click
+                analyzeSentiment(symbol); // Show news immediately on click
             });
         });
     }
@@ -274,7 +307,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Form submission (prevent default form behavior)
     sentimentForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        testSentimentAnalysis();
     });
     
     // Test function to verify elements exist
@@ -285,79 +317,79 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('progressText:', document.getElementById('progressText'));
         console.log('overallSentiment:', document.getElementById('overallSentiment'));
         console.log('confidenceScore:', document.getElementById('confidenceScore'));
-        console.log('newsCount:', document.getElementById('newsCount'));
     }
     
-    // Update sentiment meter
-    function updateSentimentMeter(sentiment, confidence) {
-        const meterNeedle = document.getElementById('meterNeedle');
-        const meterValue = document.getElementById('meterValue');
-        
-        if (!meterNeedle || !meterValue) return;
-        
-        let position = 50; // Default to center (neutral)
-        let value = 0;
-        
-        if (sentiment === 'Positive') {
-            position = 50 + (confidence * 50); // 50% to 100%
-            value = Math.round(confidence * 100);
-        } else if (sentiment === 'Negative') {
-            position = 50 - (confidence * 50); // 0% to 50%
-            value = Math.round(confidence * 100);
-        } else {
-            position = 50; // Center
-            value = Math.round(confidence * 100);
-        }
-        
-        // Ensure position is within bounds
-        position = Math.max(0, Math.min(100, position));
-        
-        meterNeedle.style.left = position + '%';
-        meterValue.textContent = value + '%';
-        
-        console.log('Meter updated:', sentiment, confidence, position + '%');
-    }
+     // Update sentiment meter
+     function updateSentimentMeter(sentiment, confidence) {
+         const meterNeedle = document.getElementById('meterNeedle');
+         
+         if (!meterNeedle) return;
+         
+         let position = 50; // Default to center (neutral)
+         
+         // Map sentiment to 5 sections: Very Negative, Negative, Neutral, Positive, Very Positive
+         if (sentiment === 'Very Positive') {
+             position = 75 + (confidence * 25); // 75% to 100%
+         } else if (sentiment === 'Positive') {
+             position = 50 + (confidence * 25); // 50% to 75%
+         } else if (sentiment === 'Neutral') {
+             position = 37.5 + (confidence * 12.5); // 37.5% to 50%
+         } else if (sentiment === 'Negative') {
+             position = 25 + (confidence * 12.5); // 25% to 37.5%
+         } else if (sentiment === 'Very Negative') {
+             position = confidence * 25; // 0% to 25%
+         } else {
+             // Fallback for unknown sentiment
+             position = 50;
+         }
+         
+         // Ensure position is within bounds
+         position = Math.max(0, Math.min(100, position));
+         
+         meterNeedle.style.left = position + '%';
+         
+         console.log('Meter updated:', sentiment, confidence, position + '%');
+     }
     
-    // Run test after page loads
-    setTimeout(testElements, 1000);
+     // Theme toggle functionality
+     const themeToggle = document.getElementById('themeToggle');
+     const themeIcon = document.getElementById('themeIcon');
+     const body = document.body;
+     
+     // Check for saved theme preference or default to light mode
+     const currentTheme = localStorage.getItem('theme') || 'light';
+     setTheme(currentTheme);
+     
+     themeToggle.addEventListener('click', function() {
+         const newTheme = body.classList.contains('dark-theme') ? 'light' : 'dark';
+         setTheme(newTheme);
+         localStorage.setItem('theme', newTheme);
+     });
+     
+     function setTheme(theme) {
+         if (theme === 'dark') {
+             body.classList.add('dark-theme');
+             themeIcon.className = 'fas fa-moon';
+         } else {
+             body.classList.remove('dark-theme');
+             themeIcon.className = 'fas fa-sun';
+         }
+     }
+     
+     // Run test after page loads
+     setTimeout(testElements, 1000);
     
     // Analyze sentiment function
-    window.testSentimentAnalysis = function() {
-        const symbol = searchInput.value.trim();
-        console.log('Analyze sentiment triggered for:', symbol);
-        
-        if (!symbol) {
-            showError('Please enter a stock symbol or company name');
-            return;
-        }
-        
-        // Extract symbol from query (assume first word is symbol if it looks like one)
-        const extractedSymbol = symbol.split(' ')[0].toUpperCase();
-        console.log('Extracted symbol:', extractedSymbol);
-        analyzeSentiment(extractedSymbol);
-    };
     
-    // Reset all function
-    window.resetAll = function() {
-        console.log('Resetting all...');
-        
-        // Clear search input
-        searchInput.value = '';
-        
+    // Auto-reset function (called when starting new search)
+    function autoReset() {
         // Hide all sections
         resultsSection.classList.add('d-none');
         progressSection.style.display = 'none';
         progressSection.classList.add('d-none');
         errorMessage.classList.add('d-none');
         
-        // Hide dropdowns
-        autocompleteDropdown.style.display = 'none';
-        sampleStocksDropdown.style.display = 'none';
-        
-        // Reset button state
-        const analyzeBtn = document.getElementById('analyzeBtn');
-        analyzeBtn.disabled = false;
-        analyzeBtn.innerHTML = '<i class="fas fa-chart-bar me-1"></i>Analyze Sentiment';
+        // Button removed - no need to reset button state
         
         // Reset progress bar
         const progressBar = document.getElementById('progressBar');
@@ -365,21 +397,56 @@ document.addEventListener('DOMContentLoaded', function() {
             progressBar.style.width = '0%';
         }
         
-        // Reset meter
-        const meterNeedle = document.getElementById('meterNeedle');
-        const meterValue = document.getElementById('meterValue');
-        if (meterNeedle) {
-            meterNeedle.style.left = '50%';
+         // Reset meter
+         const meterNeedle = document.getElementById('meterNeedle');
+         if (meterNeedle) {
+             meterNeedle.style.left = '50%';
+         }
+        
+         // Clear news items
+         const newsItemsContainer = document.getElementById('newsItems');
+         if (newsItemsContainer) {
+             newsItemsContainer.innerHTML = '';
+         }
+         
+         // Clear insights
+         const insightsContent = document.getElementById('insightsContent');
+         if (insightsContent) {
+             insightsContent.innerHTML = '';
+         }
+        
+        
+        // Clear stock price display
+        const stockPrice = document.getElementById('stockPrice');
+        const priceChange = document.getElementById('priceChange');
+        if (stockPrice) {
+            stockPrice.textContent = '$0.00';
         }
-        if (meterValue) {
-            meterValue.textContent = '0%';
+        if (priceChange) {
+            priceChange.textContent = '+$0.00 (0.00%)';
+            priceChange.className = 'text-muted';
         }
         
-        // Clear news items
-        const newsItemsContainer = document.getElementById('newsItems');
-        if (newsItemsContainer) {
-            newsItemsContainer.innerHTML = '';
+        // Destroy chart if it exists
+        if (window.priceSentimentChartInstance) {
+            window.priceSentimentChartInstance.destroy();
+            window.priceSentimentChartInstance = null;
         }
+    }
+    
+    // Reset all function (kept for compatibility)
+    window.resetAll = function() {
+        console.log('Resetting all...');
+        
+        // Clear search input
+        searchInput.value = '';
+        
+        // Hide dropdowns
+        autocompleteDropdown.style.display = 'none';
+        sampleStocksDropdown.style.display = 'none';
+        
+        // Call auto-reset
+        autoReset();
         
         console.log('Reset complete');
     };
@@ -408,7 +475,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             // Show only news, not sentiment
-            displayNewsOnly(data);
+            displayNewsOnlyResults(data);
         })
         .catch(error => {
             loadingSpinner.classList.add('d-none');
@@ -417,19 +484,31 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    function displayNewsOnly(data) {
-        // Hide sentiment results, show only news
+     function displayNewsOnlyResults(data) {
+         // Update stock price display
+         updateStockPrice(data);
+         
+         // Create price-sentiment chart
+         createPriceSentimentChart(data);
+         
+         // Display insights
+         if (data.insights) {
+             displayInsights(data.insights);
+         }
+         
+         // Display news items with sentiment badges
         const newsItemsContainer = document.getElementById('newsItems');
+        
         if (data.news_items && data.news_items.length > 0) {
             newsItemsContainer.innerHTML = data.news_items.map(item => `
-                <div class="col-md-6 mb-4">
-                    <div class="card news-card h-100">
+                <div class="col-12 mb-3">
+                    <div class="card news-card">
                         <div class="card-body p-4">
                             <h6 class="card-title fw-bold mb-3">${item.title}</h6>
                             <p class="card-text text-muted mb-3">${item.summary.substring(0, 120)}...</p>
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <span class="badge bg-secondary px-3 py-2">
-                                    News
+                                <span class="badge ${getSentimentBadgeColor(item.sentiment)} px-3 py-2">
+                                    ${item.sentiment}
                                 </span>
                                 <small class="text-muted">${item.publisher}</small>
                             </div>
@@ -442,9 +521,17 @@ document.addEventListener('DOMContentLoaded', function() {
             newsItemsContainer.innerHTML = '<div class="col-12"><p class="text-muted text-center">No news items found for this symbol.</p></div>';
         }
         
-        // Show results section but hide sentiment
+        // Show results section
         resultsSection.classList.remove('d-none');
-        document.querySelector('.row .col-md-6:first-child').style.display = 'none'; // Hide sentiment card
+        
+        // Show sentiment card but make it smaller
+        const sentimentCard = document.querySelector('.row .col-md-6:first-child');
+        if (sentimentCard) {
+            sentimentCard.style.display = 'block';
+            sentimentCard.className = 'col-md-4'; // Make it smaller
+        }
+        
+        // Make news count card smaller too
         
         // Don't clear search input - keep the stock name visible
         autocompleteDropdown.style.display = 'none';
@@ -461,10 +548,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         console.log('Progress section shown');
         
-        // Reset button state
-        const analyzeBtn = document.getElementById('analyzeBtn');
-        analyzeBtn.disabled = true;
-        analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Analyzing...';
+        // Button removed - no need to set button state
         
         // Simulate progress
         let progress = 0;
@@ -512,9 +596,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             setTimeout(() => {
-                // Reset button state
-                analyzeBtn.disabled = false;
-                analyzeBtn.innerHTML = '<i class="fas fa-chart-bar me-1"></i>Analyze Sentiment';
+                // Button removed - no need to reset button state
                 progressSection.style.display = 'none';
                 progressSection.classList.add('d-none');
                 
@@ -531,9 +613,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => {
             clearInterval(progressInterval);
             
-            // Reset button state
-            analyzeBtn.disabled = false;
-            analyzeBtn.innerHTML = '<i class="fas fa-chart-bar me-1"></i>Analyze Sentiment';
+            // Button removed - no need to reset button state
             progressSection.style.display = 'none';
             progressSection.classList.add('d-none');
             
@@ -548,15 +628,15 @@ document.addEventListener('DOMContentLoaded', function() {
         // Show sentiment results (only after button click)
         const sentimentCard = document.querySelector('.row .col-md-6:first-child');
         if (sentimentCard) {
-            sentimentCard.style.display = 'block'; // Show sentiment card
+            sentimentCard.style.display = 'block';
+            sentimentCard.className = 'col-md-6'; // Reset to full size
         }
+        
         
         // Update overall sentiment
         const sentimentElement = document.getElementById('overallSentiment');
         const confidenceElement = document.getElementById('confidenceScore');
-        const newsCountElement = document.getElementById('newsCount');
-        
-        console.log('Elements found:', sentimentElement, confidenceElement, newsCountElement);
+        console.log('Elements found:', sentimentElement, confidenceElement);
         
         if (sentimentElement) {
             sentimentElement.textContent = data.overall_sentiment || 'Neutral';
@@ -567,19 +647,26 @@ document.addEventListener('DOMContentLoaded', function() {
             confidenceElement.textContent = `Confidence: ${((data.confidence || 0) * 100).toFixed(1)}%`;
         }
         
-        if (newsCountElement) {
-            newsCountElement.textContent = data.news_count || 0;
-        }
-        
         // Update sentiment meter
         updateSentimentMeter(data.overall_sentiment, data.confidence);
         
-        // Display news items with sentiment
-        const newsItemsContainer = document.getElementById('newsItems');
+         // Update stock price display
+         updateStockPrice(data);
+         
+         // Create price-sentiment chart
+         createPriceSentimentChart(data);
+         
+         // Display insights
+         if (data.insights) {
+             displayInsights(data.insights);
+         }
+         
+         // Display news items with sentiment
+         const newsItemsContainer = document.getElementById('newsItems');
         if (data.news_items && data.news_items.length > 0) {
             newsItemsContainer.innerHTML = data.news_items.map(item => `
-                <div class="col-md-6 mb-4">
-                    <div class="card news-card h-100">
+                <div class="col-12 mb-3">
+                    <div class="card news-card">
                         <div class="card-body p-4">
                             <h6 class="card-title fw-bold mb-3">${item.title}</h6>
                             <p class="card-text text-muted mb-3">${item.summary.substring(0, 120)}...</p>
@@ -598,35 +685,213 @@ document.addEventListener('DOMContentLoaded', function() {
             newsItemsContainer.innerHTML = '<div class="col-12"><p class="text-muted text-center">No news items found for this symbol.</p></div>';
         }
         
-        // Show results section
-        resultsSection.classList.remove('d-none');
-        
-        // Don't clear search input - keep the stock name visible
-        autocompleteDropdown.style.display = 'none';
-    }
+         // Show results section
+         resultsSection.classList.remove('d-none');
+         
+         // Don't clear search input - keep the stock name visible
+         autocompleteDropdown.style.display = 'none';
+     }
+     
+     // Display insights function
+     function displayInsights(insights) {
+         const insightsContent = document.getElementById('insightsContent');
+         if (!insightsContent || !insights) return;
+         
+         const html = `
+             <div class="row">
+                 <div class="col-md-6 mb-4">
+                     <h6 class="text-primary mb-3">
+                         <i class="fas fa-chart-line me-2"></i>
+                         Market Outlook
+                     </h6>
+                     <p class="mb-3">${insights.market_outlook}</p>
+                     
+                     <h6 class="text-success mb-3">
+                         <i class="fas fa-arrow-up me-2"></i>
+                         Opportunities
+                     </h6>
+                     <ul class="list-unstyled">
+                         ${insights.opportunities.map(opp => `<li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>${opp}</li>`).join('')}
+                     </ul>
+                 </div>
+                 
+                 <div class="col-md-6 mb-4">
+                     <h6 class="text-warning mb-3">
+                         <i class="fas fa-key me-2"></i>
+                         Key Points
+                     </h6>
+                     <ul class="list-unstyled">
+                         ${insights.key_points.map(point => `<li class="mb-2"><i class="fas fa-bullseye text-warning me-2"></i>${point}</li>`).join('')}
+                     </ul>
+                     
+                     <h6 class="text-danger mb-3">
+                         <i class="fas fa-exclamation-triangle me-2"></i>
+                         Risk Factors
+                     </h6>
+                     <ul class="list-unstyled">
+                         ${insights.risk_factors.map(risk => `<li class="mb-2"><i class="fas fa-exclamation-circle text-danger me-2"></i>${risk}</li>`).join('')}
+                     </ul>
+                 </div>
+             </div>
+             
+             <div class="row mt-3">
+                 <div class="col-12">
+                     <h6 class="text-info mb-3">
+                         <i class="fas fa-newspaper me-2"></i>
+                         News Sentiment Breakdown
+                     </h6>
+                     <div class="row text-center">
+                         <div class="col-3">
+                             <div class="bg-success text-white p-2 rounded">
+                                 <strong>${insights.sentiment_summary.positive_news}</strong>
+                                 <br><small>Positive</small>
+                             </div>
+                         </div>
+                         <div class="col-3">
+                             <div class="bg-warning text-dark p-2 rounded">
+                                 <strong>${insights.sentiment_summary.neutral_news}</strong>
+                                 <br><small>Neutral</small>
+                             </div>
+                         </div>
+                         <div class="col-3">
+                             <div class="bg-danger text-white p-2 rounded">
+                                 <strong>${insights.sentiment_summary.negative_news}</strong>
+                                 <br><small>Negative</small>
+                             </div>
+                         </div>
+                         <div class="col-3">
+                             <div class="bg-secondary text-white p-2 rounded">
+                                 <strong>${insights.sentiment_summary.volatile_news}</strong>
+                                 <br><small>Volatile</small>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         `;
+         
+         insightsContent.innerHTML = html;
+     }
     
     function showError(message) {
         document.getElementById('errorText').textContent = message;
         errorMessage.classList.remove('d-none');
     }
     
-    function getSentimentColor(sentiment) {
-        switch(sentiment.toLowerCase()) {
-            case 'positive': return 'text-success';
-            case 'negative': return 'text-danger';
-            case 'neutral': return 'text-warning';
-            default: return 'text-muted';
+     function getSentimentColor(sentiment) {
+         switch(sentiment.toLowerCase()) {
+             case 'very positive': return 'text-success';
+             case 'positive': return 'text-success';
+             case 'negative': return 'text-danger';
+             case 'very negative': return 'text-danger';
+             case 'neutral': return 'text-warning';
+             default: return 'text-muted';
+         }
+     }
+    
+     function getSentimentBadgeColor(sentiment) {
+         switch(sentiment.toLowerCase()) {
+             case 'very positive': return 'bg-success';
+             case 'positive': return 'bg-success';
+             case 'negative': return 'bg-danger';
+             case 'very negative': return 'bg-danger';
+             case 'neutral': return 'bg-warning text-dark';
+             case 'volatile': return 'bg-secondary';
+             default: return 'bg-secondary';
+         }
+     }
+    
+    // Update stock price display
+    function updateStockPrice(data) {
+        const stockPriceElement = document.getElementById('stockPrice');
+        const priceChangeElement = document.getElementById('priceChange');
+        
+        if (stockPriceElement && data.current_price) {
+            stockPriceElement.textContent = `$${data.current_price}`;
+        }
+        
+        if (priceChangeElement && data.price_change !== undefined && data.price_change_percent !== undefined) {
+            const isPositive = data.price_change >= 0;
+            const sign = isPositive ? '+' : '';
+            priceChangeElement.textContent = `${sign}$${data.price_change} (${sign}${data.price_change_percent}%)`;
+            priceChangeElement.className = `text-muted ${isPositive ? 'price-positive' : 'price-negative'}`;
         }
     }
     
-    function getSentimentBadgeColor(sentiment) {
-        switch(sentiment.toLowerCase()) {
-            case 'positive': return 'bg-success';
-            case 'negative': return 'bg-danger';
-            case 'neutral': return 'bg-warning text-dark';
-            default: return 'bg-secondary';
+    // Create price-sentiment overlay chart
+    function createPriceSentimentChart(data) {
+        const canvas = document.getElementById('priceSentimentChart');
+        if (!canvas || !data.chart_data || !data.sentiment_data) return;
+        
+        // Destroy existing chart if it exists
+        if (window.priceSentimentChartInstance) {
+            window.priceSentimentChartInstance.destroy();
+            window.priceSentimentChartInstance = null;
+        }
+        
+        const ctx = canvas.getContext('2d');
+        
+        const chartData = data.chart_data.map(item => ({
+            x: new Date(item.date),
+            y: item.price
+        }));
+        
+        try {
+            window.priceSentimentChartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: [{
+                    label: 'Stock Price ($)',
+                    data: chartData,
+                    borderColor: '#4F46E5',
+                    backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'day'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Stock Price ($)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    }
+                }
+            }
+        });
+        } catch (error) {
+            console.error('Error creating chart:', error);
         }
     }
+    
 });
 </script>
 {% endblock %}

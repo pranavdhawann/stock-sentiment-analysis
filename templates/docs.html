@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+
+{% block title %}Documentation - InfoEdge{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section text-white py-5">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <h1 class="text-5xl font-extrabold mb-4">
+                    Documentation
+                </h1>
+                <p class="text-lg text-gray-200 mt-2">
+                    Learn how to use InfoEdge for intelligent stock sentiment analysis
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <!-- Getting Started Section -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="card card-enhanced">
+                <div class="card-body p-4">
+                    <h3 class="card-title text-center mb-4">
+                        <i class="fas fa-rocket text-primary me-2"></i>
+                        Getting Started
+                    </h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>1. Search for a Stock</h5>
+                            <p class="text-muted">Enter a stock symbol (e.g., AAPL, TSLA) or company name in the search box.</p>
+                            
+                            <h5>2. View Results</h5>
+                            <p class="text-muted">Get instant sentiment analysis with news articles, charts, and keyword insights.</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>3. Analyze Trends</h5>
+                            <p class="text-muted">Use the sentiment meter and trend charts to understand market mood.</p>
+                            
+                            <h5>4. Make Decisions</h5>
+                            <p class="text-muted">Combine sentiment data with your own research for informed trading decisions.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Documentation Section -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="card card-enhanced">
+                <div class="card-body p-4">
+                    <h3 class="card-title text-center mb-4">
+                        <i class="fas fa-code text-primary me-2"></i>
+                        API Endpoints
+                    </h3>
+                    
+                    <div class="mb-4">
+                        <h5>Search Stocks</h5>
+                        <div class="bg-dark text-light p-3 rounded mb-2">
+                            <code>GET /api/search_stocks?q={query}</code>
+                        </div>
+                        <p class="text-muted">Search for stocks by symbol or company name. Returns matching stocks with symbols and names.</p>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h5>Analyze Sentiment</h5>
+                        <div class="bg-dark text-light p-3 rounded mb-2">
+                            <code>POST /api/analyze_sentiment</code><br>
+                            <code>Body: {"symbol": "AAPL"}</code>
+                        </div>
+                        <p class="text-muted">Analyze sentiment for a specific stock. Returns news articles, sentiment scores, charts, and keyword analysis.</p>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h5>Health Check</h5>
+                        <div class="bg-dark text-light p-3 rounded mb-2">
+                            <code>GET /health</code>
+                        </div>
+                        <p class="text-muted">Check the health status of the application.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Documentation Section -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="card card-enhanced">
+                <div class="card-body p-4">
+                    <h3 class="card-title text-center mb-4">
+                        <i class="fas fa-cogs text-primary me-2"></i>
+                        Features Explained
+                    </h3>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Live Sentiment Meter</h5>
+                            <p class="text-muted">A visual gauge showing the overall sentiment percentage for a stock based on recent news analysis.</p>
+                            
+                            <h5>News Feed</h5>
+                            <p class="text-muted">Recent news articles with sentiment tags (Positive, Negative, Neutral) and confidence scores.</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Price & Sentiment Chart</h5>
+                            <p class="text-muted">Interactive chart showing stock price movement overlaid with sentiment trends over the last 30 days.</p>
+                            
+                            <h5>Keyword Cloud</h5>
+                            <p class="text-muted">Visual representation of common themes and keywords in recent news, color-coded by sentiment.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Sources Section -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="card card-enhanced">
+                <div class="card-body p-4">
+                    <h3 class="card-title text-center mb-4">
+                        <i class="fas fa-database text-primary me-2"></i>
+                        Data Sources & Methodology
+                    </h3>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>News Sources</h5>
+                            <p class="text-muted">We analyze news from multiple financial sources to provide comprehensive sentiment analysis.</p>
+                            
+                            <h5>Sentiment Analysis</h5>
+                            <p class="text-muted">Advanced NLP algorithms analyze news headlines and content to determine sentiment scores.</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Real-time Updates</h5>
+                            <p class="text-muted">Data is updated in real-time to provide the most current market sentiment.</p>
+                            
+                            <h5>Confidence Scoring</h5>
+                            <p class="text-muted">Each sentiment analysis includes a confidence score to help you assess reliability.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Best Practices Section -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="card card-enhanced">
+                <div class="card-body p-4">
+                    <h3 class="card-title text-center mb-4">
+                        <i class="fas fa-lightbulb text-primary me-2"></i>
+                        Best Practices
+                    </h3>
+                    
+                    <div class="alert alert-info">
+                        <h5 class="alert-heading">Important Guidelines</h5>
+                        <ul class="mb-0">
+                            <li>Use sentiment analysis as one factor in your decision-making process</li>
+                            <li>Consider the confidence scores when interpreting results</li>
+                            <li>Look for trends over time rather than single data points</li>
+                            <li>Combine with technical and fundamental analysis</li>
+                            <li>Always do your own research before making investment decisions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Support Section -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card card-enhanced">
+                <div class="card-body p-4 text-center">
+                    <h4 class="card-title mb-3">
+                        <i class="fas fa-question-circle text-primary me-2"></i>
+                        Need Help?
+                    </h4>
+                    <p class="mb-3">
+                        If you have questions or need support, feel free to reach out or check our GitHub repository.
+                    </p>
+                    <a href="https://github.com/pranavdhawann/stock-sentiment-analysis" target="_blank" class="btn btn-primary me-3">
+                        <i class="fab fa-github me-2"></i>
+                        View on GitHub
+                    </a>
+                    <a href="{{ url_for('about') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-info-circle me-2"></i>
+                        About InfoEdge
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,57 +1,41 @@
-# Stock Sentiment Analyzer
+# InfoEdge - Stock Sentiment Analysis
 
-A real-time stock news sentiment analysis application built with Flask and AI-powered sentiment analysis models.
+A modern, real-time stock sentiment analysis application that helps investors make informed decisions by analyzing news sentiment and market trends.
 
-## 🚀 Features
+## 🚀 Live Demo
 
-- **Real-time Sentiment Analysis**: Analyze sentiment of stock news using VADER and keyword-based analysis
+**Try it now**: [https://gothic-parsec-471402-b9.uc.r.appspot.com](https://gothic-parsec-471402-b9.uc.r.appspot.com)
+
+## ✨ Features
+
+- **Real-time Sentiment Analysis**: AI-powered analysis of stock news using advanced sentiment models
+- **Interactive Sentiment Meter**: Visual gauge showing market sentiment with confidence scores
+- **Stock Price Charts**: Real-time stock price data with interactive charts
+- **Summarized Insights**: AI-generated market outlook, key points, and risk analysis
+- **News Analysis**: Comprehensive news sentiment breakdown with individual article analysis
+- **Modern UI**: Clean, responsive design with light/dark theme support
 - **Smart Search**: Search by ticker symbol or company name with autocomplete
-- **Visual Sentiment Meter**: Interactive meter showing sentiment scores with animated needle
-- **Quick Stocks**: Quick access to popular stocks (AAPL, MSFT, GOOGL, etc.)
-- **Responsive Design**: Beautiful, mobile-friendly interface
-
-## ⚠️ Limitations & Considerations
-
-### **Data Limitations**
-- **Rate Limiting**: yfinance API has rate limits that may affect data fetching
-- **News Coverage**: Limited to news available through yfinance API
-- **Real-time Constraints**: News updates depend on external API availability
-
-### **Analysis Limitations**
-- **Sentiment Accuracy**: Sentiment analysis is based on text patterns and may not capture market nuances
-- **Language Dependency**: Optimized for English language content
-
-## 📊 Sentiment Analysis Models
-
-- **VADER Sentiment**: Rule-based sentiment analysis optimized for social media and financial content
-- **Keyword Analysis**: Fallback sentiment analysis using financial keywords
-- **Full Content Analysis**: Analyzes title, summary, and full article content for maximum accuracy
-
-## 📰 News Sources
-
-- **Primary Source**: yfinance API (Yahoo Finance data provider)
-- **Coverage**: Major stock exchanges and financial markets
-- **Update Frequency**: Real-time updates with rate limiting protection
-- **Data Quality**: Comprehensive analysis of news headlines and full content
-
-## 🎯 Demo
-
-Try the live application: [Demo Link](https://your-demo-link.com)
 
 ## 📱 Usage
 
-1. **Search for a stock**: Enter a ticker symbol (e.g., AAPL) or company name
-2. **Click "Analyze Sentiment"**: The application will fetch news and analyze sentiment
-3. **View results**: See overall sentiment, confidence score, and sentiment meter
-4. **Browse news**: Review individual news articles with sentiment analysis
-5. **Reset**: Use the reset button to start fresh
+1. **Search**: Enter a stock ticker (e.g., AAPL, TSLA, NVDA) or company name
+2. **Analyze**: The app automatically fetches news and analyzes sentiment
+3. **Review**: View sentiment meter, stock chart, insights, and news analysis
+4. **Explore**: Toggle between light/dark themes for comfortable viewing
+
 
 ## ⚠️ Disclaimer
 
-This tool is for informational purposes only and should not be considered as financial advice. Always conduct your own research and consult with financial professionals before making investment decisions. Past performance and sentiment analysis do not guarantee future results.
+This tool is for informational purposes only and should not be considered as financial advice. Always conduct your own research and consult with financial professionals before making investment decisions.
 
-**Risk Warning**: Stock market investments carry inherent risks. The sentiment analysis provided by this tool is based on news content and should not be the sole basis for investment decisions.
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ---
 
-⭐ If you found this project helpful, please give it a star!
+⭐ **Star this repository if you found it helpful!**
