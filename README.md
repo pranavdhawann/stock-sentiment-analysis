@@ -1,5 +1,7 @@
 # InfoEdge - Stock Sentiment Analysis
 A modern, real-time stock sentiment analysis application that helps investors make informed decisions by analyzing news sentiment and market trends.
+
+# 🚀 Demo
 **Try it now**: [DEMO](https://gothic-parsec-471402-b9.uc.r.appspot.com)
 
 ## ✨ Features
@@ -12,7 +14,6 @@ A modern, real-time stock sentiment analysis application that helps investors ma
 - **Smart Search**: Search by ticker symbol or company name with autocomplete
 
 ## 📱 Usage
-
 1. **Search**: Enter a stock ticker (e.g., AAPL, TSLA, NVDA) or company name
 2. **Analyze**: The app automatically fetches news and analyzes sentiment
 3. **Review**: View sentiment meter, stock chart, insights, and news analysis
