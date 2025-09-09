@@ -84,7 +84,7 @@ InfoEdge is a cutting-edge financial sentiment analysis platform that leverages 
 ## 🚀 **Quick Start**
 
 ### **Option 1: Live Demo (Recommended)**
-Visit our live application: **[https://gothic-parsec-471402-b9.uc.r.appspot.com](https://gothic-parsec-471402-b9.uc.r.appspot.com)**
+Visit our live application: **[DEMO](https://gothic-parsec-471402-b9.uc.r.appspot.com)**
 
 ### **Option 2: Local Installation**
 
