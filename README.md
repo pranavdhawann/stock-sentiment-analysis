@@ -187,7 +187,7 @@ graph TB
 ```
 Stock: AAPL (Apple Inc.)
 Overall Sentiment: Positive (78% confidence)
-Price: $175.43 (+2.3% today)
+Price: $234.35 (-1.48% today)
 
 News Analysis:
 ✅ Positive: 5 articles (62.5%)
@@ -207,28 +207,6 @@ Key Insights:
 
 ---
 
-## 🔧 **API Documentation**
-
-### **Endpoints**
-
-| Method | Endpoint | Description | Parameters |
-|--------|----------|-------------|------------|
-| `GET` | `/` | Main application interface | - |
-| `GET` | `/health` | Health check endpoint | - |
-| `GET` | `/api/search_stocks` | Search for stocks | `q` (query string) |
-| `POST` | `/api/analyze_sentiment` | Analyze stock sentiment | `symbol` (stock ticker) |
-
-### **Example API Usage**
-
-```bash
-# Search for stocks
-curl "https://gothic-parsec-471402-b9.uc.r.appspot.com/api/search_stocks?q=AAPL"
-
-# Analyze sentiment
-curl -X POST "https://gothic-parsec-471402-b9.uc.r.appspot.com/api/analyze_sentiment" \
-     -H "Content-Type: application/json" \
-     -d '{"symbol": "AAPL"}'
-```
 
 ---
 
@@ -308,12 +286,6 @@ python app.py
 
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
-**Key Points:**
-- ✅ Commercial use allowed
-- ✅ Modification allowed
-- ✅ Distribution allowed
-- ✅ Private use allowed
-- ❌ No liability or warranty
 
 ---
 
@@ -322,29 +294,3 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 **Important Legal Notice**: This tool is for informational and educational purposes only. It should not be considered as financial advice, investment recommendations, or trading signals. Always conduct your own research and consult with qualified financial professionals before making investment decisions. The authors and contributors are not responsible for any financial losses or decisions made based on this application.
 
 ---
-
-## 🌟 **Show Your Support**
-
-If you found this project helpful, please consider:
-
-- ⭐ **Starring** this repository
-- 🍴 **Forking** for your own projects
-- 🐛 **Reporting** bugs and issues
-- 💡 **Suggesting** new features
-- 📢 **Sharing** with your network
-
----
-
-## 📞 **Connect & Support**
-
-<div align="center">
-
-[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/pranavdhawann)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/pranavdhawann)
-[![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/pranavdhawann)
-
-**Made with ❤️ by [Pranav Dhawan](https://github.com/pranavdhawann)**
-
-[⬆ Back to Top](#-infoedge---stock-sentiment-analysis)
-
-</div>
