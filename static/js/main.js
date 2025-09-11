@@ -7,7 +7,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const mobileOverlay = document.getElementById('mobileOverlay');
     
     if (mobileMenuBtn && sidebar && mobileOverlay) {
-        mobileMenuBtn.addEventListener('click', function() {
+        console.log('Mobile menu elements found:', { mobileMenuBtn, sidebar, mobileOverlay }); // Debug log
+        
+        mobileMenuBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            console.log('Mobile menu button clicked'); // Debug log
+            
             sidebar.classList.toggle('open');
             mobileOverlay.classList.toggle('show');
             
@@ -54,6 +61,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 const icon = mobileMenuBtn.querySelector('i');
                 icon.className = 'fas fa-bars';
             }
+        });
+    } else {
+        console.error('Mobile menu elements not found:', { 
+            mobileMenuBtn: !!mobileMenuBtn, 
+            sidebar: !!sidebar, 
+            mobileOverlay: !!mobileOverlay 
         });
     }
 

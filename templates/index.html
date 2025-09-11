@@ -9,7 +9,7 @@
         <div class="container">
             <div class="row justify-content-center text-center">
                 <div class="col-lg-10">
-                    <h1 class="main-title">
+                    <h1 class="main-title" id="mainTitle" style="cursor: pointer;">
                         INFOEDGE
                     </h1>
                     <p class="main-subtitle">
@@ -161,9 +161,9 @@
                                                     </div>
                                                     
                                                     <div class="sentiment-bar-labels">
-                                                        <span class="bar-label negative">Negative</span>
+                                                        <span class="bar-label negative">Bearish</span>
                                                         <span class="bar-label neutral">Neutral</span>
-                                                        <span class="bar-label positive">Positive</span>
+                                                        <span class="bar-label positive">Bullish</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -182,7 +182,12 @@
                                                     <small class="text-muted">Last 30 days</small>
                                                 </div>
                                             </div>
-                                            <canvas id="priceSentimentChart" width="400" height="200"></canvas>
+                                            <div class="chart-container" style="position: relative; cursor: pointer;" title="Click to expand chart">
+                                                <canvas id="priceSentimentChart" width="400" height="200"></canvas>
+                                                <div class="chart-expand-overlay" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 5px 8px; border-radius: 4px; font-size: 12px; opacity: 0; transition: opacity 0.3s;">
+                                                    <i class="fas fa-expand"></i>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -205,15 +210,15 @@
 
                              <!-- News Items -->
                              <div class="mt-4">
-                                 <div class="d-flex justify-content-between align-items-center mb-3">
+                                 <div class="news-header d-flex justify-content-between align-items-center mb-3">
                                      <h4 class="mb-0 text-uppercase fw-bold">RECENT NEWS ANALYSIS</h4>
-                                     <div class="scroll-indicator">
+                                     <div class="scroll-indicator d-none d-md-flex">
                                          <i class="fas fa-chevron-down text-muted"></i>
                                          <small class="text-muted ms-1">Scroll for more</small>
                                      </div>
                                  </div>
                                  <div class="card">
-                                     <div class="card-body">
+                                     <div class="card-body p-0">
                                          <div id="newsItems" class="news-container"></div>
                                      </div>
                                  </div>
@@ -252,6 +257,46 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load default market data on page load (US markets by default)
     loadDefaultMarkets('US');
     toggleStockSections('US'); // Set initial stock sections
+    
+    // Make title clickable to reset search and go to home
+    const mainTitle = document.getElementById('mainTitle');
+    console.log('Main title element:', mainTitle); // Debug log
+    
+    if (mainTitle) {
+        mainTitle.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Title clicked!'); // Debug log
+            
+            // Reset search input
+            if (searchInput) {
+                searchInput.value = '';
+                console.log('Search input cleared'); // Debug log
+            }
+            
+            // Hide all results and dropdowns
+            if (resultsSection) {
+                resultsSection.classList.add('d-none');
+                console.log('Results section hidden'); // Debug log
+            }
+            if (autocompleteDropdown) {
+                autocompleteDropdown.style.display = 'none';
+            }
+            if (sampleStocksDropdown) {
+                sampleStocksDropdown.classList.remove('show');
+                sampleStocksDropdown.style.display = 'none';
+            }
+            
+            // Clear any error messages
+            if (errorMessage) {
+                errorMessage.classList.add('d-none');
+            }
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    } else {
+        console.error('Main title element not found!');
+    }
     
     // Market location switch functionality
     const marketLocationSwitch = document.getElementById('marketLocationSwitch');
@@ -534,8 +579,16 @@ document.addEventListener('DOMContentLoaded', function() {
          // Ensure value is within bounds
          value = Math.max(0, Math.min(100, value));
          
-         // Update text labels
-         sentimentLabel.textContent = sentiment;
+         // Update text labels with new terminology
+         let displaySentiment = sentiment;
+         if (sentiment === 'Very Positive' || sentiment === 'Positive') {
+             displaySentiment = 'Bullish';
+         } else if (sentiment === 'Very Negative' || sentiment === 'Negative') {
+             displaySentiment = 'Bearish';
+         } else if (sentiment === 'Neutral') {
+             displaySentiment = 'Neutral';
+         }
+         sentimentLabel.textContent = displaySentiment;
          sentimentConfidence.textContent = Math.round(value) + '%';
          
          // Update bar fill and indicator position
@@ -986,19 +1039,21 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (data.news_items && data.news_items.length > 0) {
             newsItemsContainer.innerHTML = data.news_items.map(item => `
-                <div class="col-12 mb-3">
+                <div class="news-item">
                     <div class="card news-card-enhanced">
-                        <div class="card-body p-4">
-                            <h6 class="card-title fw-bold mb-2">${item.title}</h6>
-                            <p class="card-text text-muted mb-3 news-snippet">${item.summary.substring(0, 200)}...</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <small class="text-muted me-2">${item.publisher}</small>
-                                    <span class="badge ${getSentimentBadgeColor(item.sentiment)} sentiment-pill">
-                                    ${item.sentiment}
-                                </span>
+                        <div class="card-body">
+                            <div class="news-header-mobile d-flex justify-content-between align-items-start mb-2">
+                                <h6 class="card-title fw-bold mb-0 flex-grow-1 me-2">${item.title}</h6>
                             </div>
-                            ${item.link ? `<a href="${item.link}" target="_blank" class="btn btn-outline-primary btn-sm">Read More</a>` : ''}
+                            <p class="card-text text-muted mb-3 news-snippet">${item.summary.substring(0, 200)}...</p>
+                            <div class="news-footer d-flex justify-content-between align-items-center flex-wrap">
+                                <div class="news-meta-row d-flex justify-content-between align-items-center w-100">
+                                    <small class="text-muted publisher">${item.publisher}</small>
+                                    <span class="badge ${getSentimentBadgeColor(item.sentiment)} sentiment-pill sentiment-badge">
+                                        ${getDisplaySentiment(item.sentiment)}
+                                    </span>
+                                </div>
+                                ${item.link ? `<a href="${item.link}" target="_blank" class="btn btn-outline-primary btn-sm mt-2 mt-md-0" role="button" aria-label="Read full article: ${item.title.substring(0, 50)}...">Read More</a>` : ''}
                             </div>
                         </div>
                     </div>
@@ -1161,19 +1216,21 @@ document.addEventListener('DOMContentLoaded', function() {
          const newsItemsContainer = document.getElementById('newsItems');
         if (data.news_items && data.news_items.length > 0) {
             newsItemsContainer.innerHTML = data.news_items.map(item => `
-                <div class="col-12 mb-3">
+                <div class="news-item">
                     <div class="card news-card-enhanced">
-                        <div class="card-body p-4">
-                            <h6 class="card-title fw-bold mb-2">${item.title}</h6>
-                            <p class="card-text text-muted mb-3 news-snippet">${item.summary.substring(0, 200)}...</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <small class="text-muted me-2">${item.publisher}</small>
-                                    <span class="badge ${getSentimentBadgeColor(item.sentiment)} sentiment-pill">
-                                    ${item.sentiment}
-                                </span>
+                        <div class="card-body">
+                            <div class="news-header-mobile d-flex justify-content-between align-items-start mb-2">
+                                <h6 class="card-title fw-bold mb-0 flex-grow-1 me-2">${item.title}</h6>
                             </div>
-                            ${item.link ? `<a href="${item.link}" target="_blank" class="btn btn-outline-primary btn-sm">Read More</a>` : ''}
+                            <p class="card-text text-muted mb-3 news-snippet">${item.summary.substring(0, 200)}...</p>
+                            <div class="news-footer d-flex justify-content-between align-items-center flex-wrap">
+                                <div class="news-meta-row d-flex justify-content-between align-items-center w-100">
+                                    <small class="text-muted publisher">${item.publisher}</small>
+                                    <span class="badge ${getSentimentBadgeColor(item.sentiment)} sentiment-pill sentiment-badge">
+                                        ${getDisplaySentiment(item.sentiment)}
+                                    </span>
+                                </div>
+                                ${item.link ? `<a href="${item.link}" target="_blank" class="btn btn-outline-primary btn-sm mt-2 mt-md-0" role="button" aria-label="Read full article: ${item.title.substring(0, 50)}...">Read More</a>` : ''}
                             </div>
                         </div>
                     </div>
@@ -1255,13 +1312,27 @@ document.addEventListener('DOMContentLoaded', function() {
     
      function getSentimentBadgeColor(sentiment) {
          switch(sentiment.toLowerCase()) {
-             case 'very positive': return 'bg-success';
-             case 'positive': return 'bg-success';
-             case 'negative': return 'bg-danger';
-             case 'very negative': return 'bg-danger';
+             case 'very positive': 
+             case 'positive': 
+             case 'bullish': return 'bg-success';
+             case 'negative': 
+             case 'very negative': 
+             case 'bearish': return 'bg-danger';
              case 'neutral': return 'bg-warning text-dark';
              case 'volatile': return 'bg-secondary';
              default: return 'bg-secondary';
+         }
+     }
+     
+     function getDisplaySentiment(sentiment) {
+         switch(sentiment.toLowerCase()) {
+             case 'very positive': 
+             case 'positive': return 'Bullish';
+             case 'negative': 
+             case 'very negative': return 'Bearish';
+             case 'neutral': return 'Neutral';
+             case 'volatile': return 'Volatile';
+             default: return sentiment;
          }
      }
     
@@ -1386,6 +1457,109 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (error) {
             console.error('Error creating chart:', error);
         }
+        
+        // Add expandable functionality to the main stock chart
+        addStockChartExpansionFunctionality();
+    }
+    
+    // Add expandable functionality to the main stock chart
+    function addStockChartExpansionFunctionality() {
+        const chartContainer = document.querySelector('.chart-container');
+        if (!chartContainer) return;
+        
+        chartContainer.addEventListener('click', function() {
+            const canvas = this.querySelector('canvas');
+            if (!canvas) return;
+            
+            // Get the stock symbol from the search input
+            const stockSymbol = document.getElementById('stockSearch').value || 'Stock';
+            
+            // Create modal for expanded chart
+            const modal = document.createElement('div');
+            modal.className = 'chart-modal';
+            modal.innerHTML = `
+                <div class="chart-modal-content">
+                    <div class="chart-modal-header">
+                        <h5>${stockSymbol} - Price Chart (Expanded View)</h5>
+                        <button class="chart-modal-close">&times;</button>
+                    </div>
+                    <div class="chart-modal-body">
+                        <canvas id="expanded-priceSentimentChart" width="800" height="500"></canvas>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Get original chart instance and recreate with larger size
+            const originalChart = window.priceSentimentChartInstance;
+            if (originalChart) {
+                const expandedCanvas = document.getElementById('expanded-priceSentimentChart');
+                const expandedCtx = expandedCanvas.getContext('2d');
+                
+                // Clone the chart data
+                const chartData = JSON.parse(JSON.stringify(originalChart.data));
+                const chartOptions = JSON.parse(JSON.stringify(originalChart.options));
+                
+                // Update options for expanded view
+                chartOptions.responsive = true;
+                chartOptions.maintainAspectRatio = false;
+                chartOptions.scales.x.display = true;
+                chartOptions.scales.y.display = true;
+                chartOptions.plugins.legend.display = true;
+                chartOptions.plugins.tooltip.enabled = true;
+                
+                // Create new chart instance
+                new Chart(expandedCtx, {
+                    type: originalChart.config.type,
+                    data: chartData,
+                    options: chartOptions
+                });
+            }
+            
+            // Close modal functionality
+            const closeBtn = modal.querySelector('.chart-modal-close');
+            closeBtn.addEventListener('click', () => {
+                // Destroy the expanded chart before removing modal
+                const expandedCanvas = document.getElementById('expanded-priceSentimentChart');
+                if (expandedCanvas) {
+                    const expandedChart = Chart.getChart(expandedCanvas);
+                    if (expandedChart) {
+                        expandedChart.destroy();
+                    }
+                }
+                document.body.removeChild(modal);
+            });
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    // Destroy the expanded chart before removing modal
+                    const expandedCanvas = document.getElementById('expanded-priceSentimentChart');
+                    if (expandedCanvas) {
+                        const expandedChart = Chart.getChart(expandedCanvas);
+                        if (expandedChart) {
+                            expandedChart.destroy();
+                        }
+                    }
+                    document.body.removeChild(modal);
+                }
+            });
+        });
+        
+        // Show expand icon on hover
+        chartContainer.addEventListener('mouseenter', function() {
+            const overlay = this.querySelector('.chart-expand-overlay');
+            if (overlay) {
+                overlay.style.opacity = '1';
+            }
+        });
+        
+        chartContainer.addEventListener('mouseleave', function() {
+            const overlay = this.querySelector('.chart-expand-overlay');
+            if (overlay) {
+                overlay.style.opacity = '0';
+            }
+        });
     }
     
 });
