@@ -2821,11 +2821,11 @@ body.dark-theme .market-price {
 }
 
 .sidebar-market-change.positive {
-    color: #10B981;
+    color: #10B981 !important;
 }
 
 .sidebar-market-change.negative {
-    color: #EF4444;
+    color: #EF4444 !important;
 }
 
 .sidebar-market-change.neutral {

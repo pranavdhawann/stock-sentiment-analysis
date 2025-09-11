@@ -385,6 +385,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     return;
                 }
                 
+                console.log('Market data received for sidebar:', data);
+                console.log('Markets array:', data.markets);
+                
                 // Clear existing cards
                 marketCardsContainer.innerHTML = '';
                 
@@ -393,24 +396,71 @@ document.addEventListener('DOMContentLoaded', function() {
                     const card = document.createElement('div');
                     card.className = 'sidebar-market-card';
                     
-                    const changeClass = market.change >= 0 ? 'positive' : 'negative';
-                    const changeSymbol = market.change >= 0 ? '+' : '';
+                    // Add null checks for market data
+                    const price = market.current_price || 0;
+                    const change = market.price_change || 0;
+                    const changePercent = market.price_change_percent || 0;
+                    const currency = market.currency || '$';
+                    const name = market.name || 'Unknown';
+                    
+                    console.log(`Market ${name}:`, {
+                        current_price: market.current_price,
+                        price_change: market.price_change,
+                        price_change_percent: market.price_change_percent,
+                        currency: market.currency,
+                        extracted_price: price,
+                        extracted_change: change,
+                        extracted_changePercent: changePercent
+                    });
+                    
+                    const changeClass = change >= 0 ? 'positive' : 'negative';
+                    const changeSymbol = change >= 0 ? '+' : '';
+                    
+                    // FORCE MARKET DATA DISPLAY - Ensure values are not 0
+                    const displayPrice = price > 0 ? price : (market.current_price || 0);
+                    const displayChange = change !== 0 ? change : (market.price_change || 0);
+                    const displayChangePercent = changePercent !== 0 ? changePercent : (market.price_change_percent || 0);
+                    
+                    console.log(`FORCE MARKET UPDATE for ${name}:`, {
+                        original_price: price,
+                        display_price: displayPrice,
+                        original_change: change,
+                        display_change: displayChange,
+                        color_class: displayChange >= 0 ? 'positive' : 'negative'
+                    });
                     
                     card.innerHTML = `
-                        <div class="sidebar-market-name">${market.name}</div>
-                        <div class="sidebar-market-price">${market.currency}${market.price.toFixed(2)}</div>
-                        <div class="sidebar-market-change ${changeClass}">
-                            ${changeSymbol}${market.change.toFixed(2)} (${changeSymbol}${market.changePercent.toFixed(2)}%)
+                        <div class="sidebar-market-name">${name}</div>
+                        <div class="sidebar-market-price">${currency}${displayPrice.toFixed(2)}</div>
+                        <div class="sidebar-market-change ${displayChange >= 0 ? 'positive' : 'negative'}">
+                            ${displayChange >= 0 ? '+' : ''}${displayChange.toFixed(2)} (${displayChange >= 0 ? '+' : ''}${displayChangePercent.toFixed(2)}%)
                         </div>
                     `;
                     
                     marketCardsContainer.appendChild(card);
+                    
+                    // Debug: Check if color classes are applied
+                    setTimeout(() => {
+                        const changeElement = card.querySelector('.sidebar-market-change');
+                        if (changeElement) {
+                            console.log(`Color check for ${name}:`, {
+                                className: changeElement.className,
+                                computedColor: window.getComputedStyle(changeElement).color,
+                                textContent: changeElement.textContent
+                            });
+                        }
+                    }, 100);
                 });
                 
                 // Show sidebar market cards
                 sidebarMarketCards.style.display = 'block';
             })
             .catch(error => {
+                // Handle different types of errors
+                if (error.message && error.message.includes('listener indicated an asynchronous response')) {
+                    console.warn('Browser extension async error (non-critical) in market data:', error.message);
+                    return;
+                }
                 console.error('Error fetching market data for sidebar:', error);
             });
     }
@@ -420,10 +470,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // Clear existing results when focusing on search input
         autoReset();
         
-        if (this.value.trim() === '') {
+        if (this.value.trim() === '' && sampleStocksDropdown) {
             sampleStocksDropdown.style.display = 'block';
             setTimeout(() => {
-                sampleStocksDropdown.classList.add('show');
+                if (sampleStocksDropdown) {
+                    sampleStocksDropdown.classList.add('show');
+                }
             }, 10);
         }
     });
@@ -433,19 +485,25 @@ document.addEventListener('DOMContentLoaded', function() {
         if (this.value.trim() !== '') {
             this.value = '';
             autoReset();
-            sampleStocksDropdown.style.display = 'block';
-            setTimeout(() => {
-                sampleStocksDropdown.classList.add('show');
-            }, 10);
+            if (sampleStocksDropdown) {
+                sampleStocksDropdown.style.display = 'block';
+                setTimeout(() => {
+                    if (sampleStocksDropdown) {
+                        sampleStocksDropdown.classList.add('show');
+                    }
+                }, 10);
+            }
         }
     });
     
     // Hide sample stocks when clicking outside
     document.addEventListener('click', function(e) {
-        if (!searchInput.contains(e.target) && !sampleStocksDropdown.contains(e.target)) {
+        if (sampleStocksDropdown && !searchInput.contains(e.target) && !sampleStocksDropdown.contains(e.target)) {
             sampleStocksDropdown.classList.remove('show');
             setTimeout(() => {
-            sampleStocksDropdown.style.display = 'none';
+                if (sampleStocksDropdown) {
+                    sampleStocksDropdown.style.display = 'none';
+                }
             }, 300);
         }
     });
@@ -525,7 +583,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Hide autocomplete when clicking outside
     document.addEventListener('click', function(e) {
-        if (!searchInput.contains(e.target) && !autocompleteDropdown.contains(e.target)) {
+        if (autocompleteDropdown && !searchInput.contains(e.target) && !autocompleteDropdown.contains(e.target)) {
             autocompleteDropdown.style.display = 'none';
         }
     });
@@ -542,8 +600,17 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('progressBar:', document.getElementById('progressBar'));
         console.log('progressText:', document.getElementById('progressText'));
         console.log('overallSentiment:', document.getElementById('overallSentiment'));
-        console.log('confidenceScore:', document.getElementById('confidenceScore'));
+        console.log('sentimentConfidence:', document.getElementById('sentimentConfidence'));
     }
+    
+    // Global error handler for async listener errors (browser extensions)
+    window.addEventListener('unhandledrejection', function(event) {
+        if (event.reason && event.reason.message && 
+            event.reason.message.includes('listener indicated an asynchronous response')) {
+            console.warn('Browser extension async error (non-critical):', event.reason.message);
+            event.preventDefault(); // Prevent the error from showing in console
+        }
+    });
     
     
      // Update horizontal sentiment meter
@@ -907,6 +974,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Auto-reset function (called when starting new search)
     function autoReset() {
+        console.log('autoReset called - results section will be hidden');
         // Hide all sections
         resultsSection.classList.add('d-none');
         progressSection.style.display = 'none';
@@ -952,15 +1020,20 @@ document.addEventListener('DOMContentLoaded', function() {
          }
         
         
-        // Clear stock price display
-        const stockPrice = document.getElementById('stockPrice');
-        const priceChange = document.getElementById('priceChange');
-        if (stockPrice) {
-            stockPrice.textContent = '$0.00';
-        }
-        if (priceChange) {
-            priceChange.textContent = '+$0.00 (0.00%)';
-            priceChange.className = 'text-muted';
+        // Clear stock price display only if no results are showing
+        if (resultsSection.classList.contains('d-none')) {
+            console.log('Resetting stock price to $0.00 because results section is hidden');
+            const stockPrice = document.getElementById('stockPrice');
+            const priceChange = document.getElementById('priceChange');
+            if (stockPrice) {
+                stockPrice.textContent = '$0.00';
+            }
+            if (priceChange) {
+                priceChange.textContent = '+$0.00 (0.00%)';
+                priceChange.className = 'text-muted';
+            }
+        } else {
+            console.log('NOT resetting stock price because results section is visible');
         }
         
         // Destroy chart if it exists
@@ -1017,13 +1090,42 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             loadingSpinner.classList.add('d-none');
+            
+            // Handle different types of errors
+            if (error.message && error.message.includes('listener indicated an asynchronous response')) {
+                console.warn('Browser extension async error (non-critical) in news fetch:', error.message);
+                return;
+            }
+            
             showError('An error occurred while fetching news. Please try again.');
             console.error('Error:', error);
         });
     }
     
      function displayNewsOnlyResults(data) {
-         // Update stock price display
+         // DIRECT PRICE DISPLAY WORKAROUND - Show price immediately
+         if (data.current_price && data.currency) {
+             const stockPriceElement = document.getElementById('stockPrice');
+             const priceChangeElement = document.getElementById('priceChange');
+             
+             if (stockPriceElement) {
+                 const price = parseFloat(data.current_price).toFixed(2);
+                 stockPriceElement.textContent = `${data.currency}${price}`;
+                 console.log('DIRECT PRICE UPDATE (News Only):', `${data.currency}${price}`);
+             }
+             
+             if (priceChangeElement && data.price_change !== undefined && data.price_change_percent !== undefined) {
+                 const isPositive = data.price_change >= 0;
+                 const sign = isPositive ? '+' : '';
+                 const priceChange = parseFloat(data.price_change).toFixed(2);
+                 const priceChangePercent = parseFloat(data.price_change_percent).toFixed(2);
+                 priceChangeElement.textContent = `${sign}${data.currency}${priceChange} (${sign}${priceChangePercent}%)`;
+                 priceChangeElement.className = `text-muted ${isPositive ? 'price-positive' : 'price-negative'}`;
+                 console.log('DIRECT PRICE CHANGE UPDATE (News Only):', `${sign}${data.currency}${priceChange} (${sign}${priceChangePercent}%)`);
+             }
+         }
+         
+         // Update stock price display (backup)
          updateStockPrice(data);
          
          // Create price-sentiment chart
@@ -1064,7 +1166,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Show results section
+        console.log('Showing results section in displayNewsOnlyResults...');
         resultsSection.classList.remove('d-none');
+        console.log('Results section classes:', resultsSection.className);
         
         // Show sentiment card but make it smaller
         const sentimentCard = document.querySelector('.row .col-md-6:first-child');
@@ -1128,6 +1232,32 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             console.log('Received data:', data);
             
+            // DIRECT PRICE DISPLAY WORKAROUND - Show price immediately
+            if (data.current_price && data.currency) {
+                // Use the force update function for guaranteed display
+                forceUpdatePrice(data.current_price, data.currency, data.price_change, data.price_change_percent);
+                
+                // Also do direct update as backup
+                const stockPriceElement = document.getElementById('stockPrice');
+                const priceChangeElement = document.getElementById('priceChange');
+                
+                if (stockPriceElement) {
+                    const price = parseFloat(data.current_price).toFixed(2);
+                    stockPriceElement.textContent = `${data.currency}${price}`;
+                    console.log('DIRECT PRICE UPDATE:', `${data.currency}${price}`);
+                }
+                
+                if (priceChangeElement && data.price_change !== undefined && data.price_change_percent !== undefined) {
+                    const isPositive = data.price_change >= 0;
+                    const sign = isPositive ? '+' : '';
+                    const priceChange = parseFloat(data.price_change).toFixed(2);
+                    const priceChangePercent = parseFloat(data.price_change_percent).toFixed(2);
+                    priceChangeElement.textContent = `${sign}${data.currency}${priceChange} (${sign}${priceChangePercent}%)`;
+                    priceChangeElement.className = `text-muted ${isPositive ? 'price-positive' : 'price-negative'}`;
+                    console.log('DIRECT PRICE CHANGE UPDATE:', `${sign}${data.currency}${priceChange} (${sign}${priceChangePercent}%)`);
+                }
+            }
+            
             // Complete progress
             clearInterval(progressInterval);
             if (progressBar) {
@@ -1159,6 +1289,13 @@ document.addEventListener('DOMContentLoaded', function() {
             progressSection.style.display = 'none';
             progressSection.classList.add('d-none');
             
+            // Handle different types of errors
+            if (error.message && error.message.includes('listener indicated an asynchronous response')) {
+                console.warn('Browser extension async error (non-critical):', error.message);
+                // This is usually a browser extension issue, not our app
+                return;
+            }
+            
             showError('An error occurred while analyzing sentiment. Please try again.');
             console.error('Error:', error);
         });
@@ -1166,6 +1303,28 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function displayResults(data) {
         console.log('displayResults called with:', data);
+        
+        // DIRECT PRICE DISPLAY WORKAROUND - Show price immediately
+        if (data.current_price && data.currency) {
+            const stockPriceElement = document.getElementById('stockPrice');
+            const priceChangeElement = document.getElementById('priceChange');
+            
+            if (stockPriceElement) {
+                const price = parseFloat(data.current_price).toFixed(2);
+                stockPriceElement.textContent = `${data.currency}${price}`;
+                console.log('DIRECT PRICE UPDATE (Display Results):', `${data.currency}${price}`);
+            }
+            
+            if (priceChangeElement && data.price_change !== undefined && data.price_change_percent !== undefined) {
+                const isPositive = data.price_change >= 0;
+                const sign = isPositive ? '+' : '';
+                const priceChange = parseFloat(data.price_change).toFixed(2);
+                const priceChangePercent = parseFloat(data.price_change_percent).toFixed(2);
+                priceChangeElement.textContent = `${sign}${data.currency}${priceChange} (${sign}${priceChangePercent}%)`;
+                priceChangeElement.className = `text-muted ${isPositive ? 'price-positive' : 'price-negative'}`;
+                console.log('DIRECT PRICE CHANGE UPDATE (Display Results):', `${sign}${data.currency}${priceChange} (${sign}${priceChangePercent}%)`);
+            }
+        }
         
         // Hide main market section and move to sidebar
         const defaultMarketsSection = document.getElementById('defaultMarketsSection');
@@ -1186,16 +1345,11 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Update overall sentiment
         const sentimentElement = document.getElementById('overallSentiment');
-        const confidenceElement = document.getElementById('confidenceScore');
-        console.log('Elements found:', sentimentElement, confidenceElement);
+        console.log('Elements found:', sentimentElement, 'confidenceScore element not found - using sentimentConfidence instead');
         
         if (sentimentElement) {
             sentimentElement.textContent = (data.overall_sentiment || 'Neutral').toUpperCase();
             sentimentElement.className = `sentiment-display ${getSentimentColor(data.overall_sentiment)}`;
-        }
-        
-        if (confidenceElement) {
-            confidenceElement.textContent = `Confidence: ${((data.confidence || 0) * 100).toFixed(1)}%`;
         }
         
         // Update horizontal sentiment meter
@@ -1241,7 +1395,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
          // Show results section
+         console.log('Showing results section in displayResults...');
          resultsSection.classList.remove('d-none');
+         console.log('Results section classes:', resultsSection.className);
          
          // Don't clear search input - keep the stock name visible
          autocompleteDropdown.style.display = 'none';
@@ -1336,15 +1492,63 @@ document.addEventListener('DOMContentLoaded', function() {
          }
      }
     
-    // Update stock price display
-    function updateStockPrice(data) {
+    // FORCE PRICE DISPLAY - Simple workaround function
+    function forceUpdatePrice(price, currency, change, changePercent) {
+        console.log('FORCE PRICE UPDATE called with:', { price, currency, change, changePercent });
+        
         const stockPriceElement = document.getElementById('stockPrice');
         const priceChangeElement = document.getElementById('priceChange');
+        
+        if (stockPriceElement && price) {
+            stockPriceElement.textContent = `${currency}${parseFloat(price).toFixed(2)}`;
+            console.log('FORCE UPDATE - Price set to:', `${currency}${parseFloat(price).toFixed(2)}`);
+        }
+        
+        if (priceChangeElement && change !== undefined && changePercent !== undefined) {
+            const isPositive = change >= 0;
+            const sign = isPositive ? '+' : '';
+            const priceChange = parseFloat(change).toFixed(2);
+            const priceChangePercent = parseFloat(changePercent).toFixed(2);
+            priceChangeElement.textContent = `${sign}${currency}${priceChange} (${sign}${priceChangePercent}%)`;
+            priceChangeElement.className = `text-muted ${isPositive ? 'price-positive' : 'price-negative'}`;
+            console.log('FORCE UPDATE - Price change set to:', `${sign}${currency}${priceChange} (${sign}${priceChangePercent}%)`);
+        }
+    }
+    
+    // Update stock price display
+    function updateStockPrice(data) {
+        console.log('updateStockPrice called with data:', data);
+        const stockPriceElement = document.getElementById('stockPrice');
+        const priceChangeElement = document.getElementById('priceChange');
+        
+        console.log('Price elements found:', stockPriceElement, priceChangeElement);
+        console.log('Price data:', {
+            current_price: data.current_price,
+            price_change: data.price_change,
+            price_change_percent: data.price_change_percent,
+            currency: data.currency
+        });
+        
+        if (stockPriceElement) {
+            console.log('Stock price element details:', {
+                currentText: stockPriceElement.textContent,
+                isVisible: stockPriceElement.offsetParent !== null,
+                display: window.getComputedStyle(stockPriceElement).display,
+                visibility: window.getComputedStyle(stockPriceElement).visibility
+            });
+        }
         
         if (stockPriceElement && data.current_price) {
             const currency = data.currency || '$';
             const price = parseFloat(data.current_price).toFixed(2);
             stockPriceElement.textContent = `${currency}${price}`;
+            console.log('Updated stock price to:', `${currency}${price}`);
+            console.log('Element textContent after update:', stockPriceElement.textContent);
+        } else {
+            console.log('Stock price element not found or no current_price data');
+            console.log('stockPriceElement exists:', !!stockPriceElement);
+            console.log('data.current_price exists:', !!data.current_price);
+            console.log('data.current_price value:', data.current_price);
         }
         
         if (priceChangeElement && data.price_change !== undefined && data.price_change_percent !== undefined) {
@@ -1355,6 +1559,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const priceChangePercent = parseFloat(data.price_change_percent).toFixed(2);
             priceChangeElement.textContent = `${sign}${currency}${priceChange} (${sign}${priceChangePercent}%)`;
             priceChangeElement.className = `text-muted ${isPositive ? 'price-positive' : 'price-negative'}`;
+            console.log('Updated price change to:', `${sign}${currency}${priceChange} (${sign}${priceChangePercent}%)`);
+        } else {
+            console.log('Price change element not found or no price change data');
         }
     }
     
