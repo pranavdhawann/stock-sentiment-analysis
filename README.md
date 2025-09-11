@@ -1,296 +1,190 @@
-<div align="center">
+# 📈 Stock Sentiment Analysis
 
-# 📈 InfoEdge - Stock Sentiment Analysis
+A real-time stock sentiment analysis application that analyzes news articles and provides sentiment insights for smarter trading decisions.
 
-[![GitHub stars](https://img.shields.io/github/stars/pranavdhawann/stock-sentiment-analysis?style=for-the-badge&logo=github&color=yellow)](https://github.com/pranavdhawann/stock-sentiment-analysis/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/pranavdhawann/stock-sentiment-analysis?style=for-the-badge&logo=github&color=blue)](https://github.com/pranavdhawann/stock-sentiment-analysis/network)
-[![GitHub issues](https://img.shields.io/github/issues/pranavdhawann/stock-sentiment-analysis?style=for-the-badge&logo=github&color=red)](https://github.com/pranavdhawann/stock-sentiment-analysis/issues)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](https://opensource.org/licenses/MIT)
-[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
-[![Flask](https://img.shields.io/badge/Flask-2.3+-green.svg?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Online-brightgreen.svg?style=for-the-badge&logo=vercel&logoColor=white)](https://gothic-parsec-471402-b9.uc.r.appspot.com)
+## 🌟 Features
 
-**AI-Powered Real-Time Stock Market Sentiment Analysis Platform**
+- **Real-time Sentiment Analysis**: Analyze news sentiment for any stock symbol
+- **Multi-Market Support**: US and Indian stock markets
+- **Interactive Charts**: Visualize stock price movements and sentiment trends
+- **News Integration**: Latest news articles with sentiment scoring
+- **Dark/Light Theme**: Toggle between themes for better user experience
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
+- **Market Overview**: Real-time market data for major indices
 
-*Transform financial news into actionable trading insights with advanced sentiment analysis*
+## 🚀 Live Demo
 
-[🚀 Live Demo](https://gothic-parsec-471402-b9.uc.r.appspot.com) • [📖 Documentation](#-documentation) • [🤝 Contributing](#-contributing) • [📄 License](#-license)
+**🌐 [Try the Live Application](https://stock-sentiment-app-egc2jnomta-uc.a.run.app)**
 
-</div>
+## 📱 Screenshots
 
----
+### Desktop View
+- Clean, modern interface with sidebar navigation
+- Interactive sentiment meter and charts
+- Real-time market data display
 
-## 🎯 **What is InfoEdge?**
+### Mobile View
+- Responsive design with hamburger menu
+- Touch-friendly interface
+- Optimized for mobile trading
 
-InfoEdge is a cutting-edge financial sentiment analysis platform that leverages artificial intelligence to analyze stock market news, social media sentiment, and market trends. It provides real-time insights to help investors make informed decisions by transforming unstructured financial data into actionable intelligence.
+## 🛠️ Technology Stack
 
-### 🔥 **Key Highlights**
+- **Backend**: Python Flask
+- **Frontend**: HTML5, CSS3, JavaScript (ES6+)
+- **Styling**: Bootstrap 5, Custom CSS
+- **Charts**: Chart.js
+- **Sentiment Analysis**: VADER Sentiment
+- **News Scraping**: BeautifulSoup4, Requests
+- **Deployment**: Google Cloud Run
+- **Containerization**: Docker
 
-- **🧠 AI-Powered Analysis**: Advanced sentiment analysis using state-of-the-art NLP models
-- **⚡ Real-Time Processing**: Live market data and news sentiment updates
-- **📊 Interactive Visualizations**: Beautiful charts and sentiment meters
-- **🎯 Multi-Source Data**: News articles, social media, and market indicators
-- **🔒 Production Ready**: Deployed on Google Cloud Platform with CI/CD
+## 📦 Installation
 
----
-
-## ✨ **Features**
-
-<table>
-<tr>
-<td width="50%">
-
-### 🎨 **User Interface**
-- **Modern Design**: Clean, responsive interface with dark/light themes
-- **Interactive Charts**: Real-time stock price and sentiment visualizations
-- **Smart Search**: Autocomplete for stock symbols and company names
-- **Mobile Optimized**: Fully responsive design for all devices
-
-</td>
-<td width="50%">
-
-### 🧠 **AI & Analytics**
-- **Sentiment Scoring**: 5-level sentiment classification (Very Positive to Very Negative)
-- **Confidence Metrics**: AI confidence scores for each analysis
-- **News Summarization**: Automated key insights extraction
-- **Risk Assessment**: Automated risk factor identification
-
-</td>
-</tr>
-<tr>
-<td width="50%">
-
-### 📈 **Market Data**
-- **Real-Time Prices**: Live stock price data from Yahoo Finance
-- **Historical Analysis**: 30-day price and sentiment trends
-- **Volume Analysis**: Trading volume correlation with sentiment
-- **Price Movement**: Real-time price change calculations
-
-</td>
-<td width="50%">
-
-### 🔍 **News Analysis**
-- **Multi-Source News**: Aggregated financial news from multiple sources
-- **Sentiment Breakdown**: Individual article sentiment analysis
-- **Publisher Tracking**: Source credibility and bias analysis
-- **Keyword Extraction**: Important market keywords and trends
-
-</td>
-</tr>
-</table>
-
----
-
-## 🚀 **Quick Start**
-
-### **Option 1: Live Demo (Recommended)**
-Visit our live application: **[DEMO](https://gothic-parsec-471402-b9.uc.r.appspot.com)**
-
-### **Option 2: Local Installation**
-
-<details>
-<summary><b>📋 Prerequisites</b></summary>
-
-- Python 3.8 or higher
+### Prerequisites
+- Python 3.8+
 - pip (Python package installer)
-- Git
 
-</details>
+### Local Setup
 
-```bash
-# 1. Clone the repository
-git clone https://github.com/pranavdhawann/stock-sentiment-analysis.git
-cd stock-sentiment-analysis
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/stock-sentiment-analysis.git
+   cd stock-sentiment-analysis
+   ```
 
-# 2. Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+2. **Create virtual environment**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
 
-# 3. Install dependencies
-pip install -r requirements.txt
+3. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-# 4. Run the application
-python app.py
-```
+4. **Run the application**
+   ```bash
+   python app.py
+   ```
 
-**🌐 Access the application at:** `http://localhost:8080`
+5. **Open in browser**
+   ```
+   http://localhost:8080
+   ```
 
----
+## 🐳 Docker Deployment
 
-## 📱 **Usage Guide**
-
-### **Step 1: Search for a Stock**
-- Enter a stock ticker symbol (e.g., `AAPL`, `TSLA`, `NVDA`)
-- Or search by company name (e.g., "Apple", "Tesla")
-- Use the autocomplete feature for quick selection
-
-### **Step 2: Analyze Sentiment**
-- Click "Analyze Sentiment" to process the stock
-- The system will fetch real-time news and market data
-- AI analysis typically takes 2-3 seconds
-
-### **Step 3: Review Results**
-- **Sentiment Meter**: Visual gauge showing overall market sentiment
-- **Price Chart**: 30-day stock price movement with volume
-- **News Analysis**: Individual article sentiment breakdown
-- **Key Insights**: AI-generated market outlook and risk factors
-
-### **Step 4: Make Informed Decisions**
-- Review confidence scores and risk factors
-- Compare sentiment trends with price movements
-- Use insights for your investment research
-
----
-
-## 🏗️ **Architecture & Technology Stack**
-
-```mermaid
-graph TB
-    A[User Interface] --> B[Flask Web App]
-    B --> C[Sentiment Analysis Engine]
-    B --> D[Stock Data API]
-    B --> E[News Aggregation]
-    
-    C --> F[NLP Processing]
-    C --> G[Sentiment Classification]
-    
-    D --> H[Yahoo Finance API]
-    E --> I[News Sources]
-    
-    B --> J[Real-time Charts]
-    B --> K[Interactive Dashboard]
-    
-    style A fill:#e1f5fe
-    style B fill:#f3e5f5
-    style C fill:#e8f5e8
-    style D fill:#fff3e0
-    style E fill:#fce4ec
-```
-
-### **🛠️ Tech Stack**
-
-| Category | Technology | Purpose |
-|----------|------------|---------|
-| **Backend** | Python 3.8+ | Core application logic |
-| **Web Framework** | Flask 2.3+ | RESTful API and web interface |
-| **Frontend** | HTML5, CSS3, JavaScript | Interactive user interface |
-| **Data Visualization** | Chart.js | Real-time charts and graphs |
-| **Data Sources** | Yahoo Finance API | Stock price and market data |
-| **Deployment** | Google Cloud Platform | Production hosting |
-| **Containerization** | Docker | Consistent deployment |
-
----
-
-## 📊 **Sample Results**
-
-### **Sentiment Analysis Example**
-```
-Stock: AAPL (Apple Inc.)
-Overall Sentiment: Positive (78% confidence)
-Price: $234.35 (-1.48% today)
-
-News Analysis:
-✅ Positive: 5 articles (62.5%)
-⚪ Neutral: 2 articles (25.0%)
-❌ Negative: 1 article (12.5%)
-
-Key Insights:
-• Strong iPhone sales exceed expectations
-• Services revenue hits record high
-• AI integration shows promising results
-```
-
-### **Market Outlook**
-- **Bullish indicators**: Strong positive sentiment from recent news coverage
-- **Risk factors**: Regulatory pressure on App Store policies
-- **Opportunities**: China market recovery, environmental initiatives
-
----
-
-
----
-
-## 🧪 **Testing**
+### Build and run with Docker
 
 ```bash
-# Run health check
-curl https://gothic-parsec-471402-b9.uc.r.appspot.com/health
+# Build the image
+docker build -t stock-sentiment-app .
 
-# Test stock search
-curl "https://gothic-parsec-471402-b9.uc.r.appspot.com/api/search_stocks?q=tesla"
-
-# Test sentiment analysis
-curl -X POST "https://gothic-parsec-471402-b9.uc.r.appspot.com/api/analyze_sentiment" \
-     -H "Content-Type: application/json" \
-     -d '{"symbol": "TSLA"}'
+# Run the container
+docker run -p 8080:8080 stock-sentiment-app
 ```
 
----
+## ☁️ Google Cloud Deployment
 
-## 🚀 **Deployment**
+### Prerequisites
+- Google Cloud SDK installed
+- Docker installed
+- Google Cloud account with billing enabled
 
-### **Google Cloud Platform (Current)**
-The application is currently deployed on Google Cloud Platform using App Engine.
+### Deploy to Cloud Run
 
-### **Docker Deployment**
 ```bash
-# Build Docker image
-docker build -t stock-sentiment-analysis .
+# Set your project ID
+export PROJECT_ID="your-project-id"
 
-# Run container
-docker run -p 8080:8080 stock-sentiment-analysis
+# Enable required APIs
+gcloud services enable cloudbuild.googleapis.com run.googleapis.com containerregistry.googleapis.com
+
+# Deploy to Cloud Run
+gcloud run deploy stock-sentiment-app --source . --platform managed --region us-central1 --allow-unauthenticated
 ```
 
-### **Local Development**
-```bash
-# Install dependencies
-pip install -r requirements.txt
+## 📊 How It Works
 
-# Run development server
-python app.py
-```
+1. **Stock Search**: Enter a stock symbol (e.g., AAPL, TSLA, TCS)
+2. **News Fetching**: System fetches latest news articles from multiple sources
+3. **Sentiment Analysis**: VADER sentiment analyzer processes news content
+4. **Visualization**: Results displayed with interactive charts and sentiment meters
+5. **Insights**: AI-generated insights and market outlook
 
----
+## 🎯 Supported Markets
 
-## 📈 **Performance Metrics**
+### US Stocks
+- Apple (AAPL), Microsoft (MSFT), Google (GOOGL)
+- Tesla (TSLA), Amazon (AMZN), Meta (META)
+- And many more...
 
-- **Response Time**: < 3 seconds for sentiment analysis
-- **Uptime**: 99.9% availability
-- **Accuracy**: 85%+ sentiment classification accuracy
-- **Scalability**: Handles 1000+ concurrent users
+### Indian Stocks
+- TCS, Infosys, Wipro, HCL Technologies
+- Reliance, HDFC Bank, ICICI Bank
+- And many more...
 
----
+## 🔧 API Endpoints
 
-## 🤝 **Contributing**
+- `GET /` - Main application interface
+- `GET /about` - About page
+- `GET /health` - Health check endpoint
+- `POST /api/analyze_sentiment` - Analyze stock sentiment
+- `GET /api/search_stocks` - Search for stocks
+- `GET /api/get_default_markets` - Get market data
 
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+## 🎨 Customization
 
-### **Quick Contribution Guide**
+### Themes
+The application supports both light and dark themes. Users can toggle between themes using the theme button in the sidebar.
+
+### Adding New Stocks
+To add support for new stocks, update the stock lists in `app.py`:
+- `indian_stocks` list for Indian market stocks
+- Stock search functionality in the frontend
+
+## 📈 Performance
+
+- **Response Time**: < 2 seconds for sentiment analysis
+- **Scalability**: Auto-scaling with Google Cloud Run
+- **Availability**: 99.9% uptime with global CDN
+- **Mobile Optimized**: Responsive design for all devices
+
+## 🤝 Contributing
+
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-### **Development Setup**
-```bash
-git clone https://github.com/pranavdhawann/stock-sentiment-analysis.git
-cd stock-sentiment-analysis
-pip install -r requirements.txt
-python app.py
-```
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👨‍💻 Author
+
+**Pranav Dhawan**
+- GitHub: [@pranavdhawann](https://github.com/pranavdhawann)
+- LinkedIn: [Pranav Dhawan](https://linkedin.com/in/pranavdhawan)
+
+## 🙏 Acknowledgments
+
+- [VADER Sentiment](https://github.com/cjhutto/vaderSentiment) for sentiment analysis
+- [Chart.js](https://www.chartjs.org/) for interactive charts
+- [Bootstrap](https://getbootstrap.com/) for responsive design
+- [Font Awesome](https://fontawesome.com/) for icons
+- [Google Cloud](https://cloud.google.com/) for hosting
+
+## 📞 Support
+
+If you have any questions or need help, please:
+- Open an issue on GitHub
+- Contact the author via LinkedIn
+- Check the documentation
 
 ---
 
-## 📄 **License**
-
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
-
-
----
-
-## ⚠️ **Disclaimer**
-
-**Important Legal Notice**: This tool is for informational and educational purposes only. It should not be considered as financial advice, investment recommendations, or trading signals. Always conduct your own research and consult with qualified financial professionals before making investment decisions. The authors and contributors are not responsible for any financial losses or decisions made based on this application.
-
----
+⭐ **Star this repository if you found it helpful!**

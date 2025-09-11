@@ -113,14 +113,14 @@ venv.bak/
 .dmypy.json
 dmypy.json
 
-# IDE
+# IDE files
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 
-# OS
+# OS generated files
 .DS_Store
 .DS_Store?
 ._*
@@ -129,9 +129,25 @@ dmypy.json
 ehthumbs.db
 Thumbs.db
 
-# Deployment files
-Dockerfile
-cloudbuild.yaml
-*.ps1
+# Local development files
+*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Documentation
+README.md
 *.md
-LICENSE
+docs/
+
+# Test files
+tests/
+test_*
+*_test.py
+
+# Deployment scripts (keep only the necessary ones)
+deploy.sh
+deploy-gcp.sh
+deploy-gcp.bat
+gcp-deployment-guide.md

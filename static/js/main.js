@@ -1,6 +1,62 @@
 // Main JavaScript for Stock Sentiment Analyzer
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Mobile menu functionality
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    
+    if (mobileMenuBtn && sidebar && mobileOverlay) {
+        mobileMenuBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('open');
+            mobileOverlay.classList.toggle('show');
+            
+            // Change icon
+            const icon = this.querySelector('i');
+            if (sidebar.classList.contains('open')) {
+                icon.className = 'fas fa-times';
+            } else {
+                icon.className = 'fas fa-bars';
+            }
+        });
+        
+        // Close menu when clicking overlay
+        mobileOverlay.addEventListener('click', function() {
+            sidebar.classList.remove('open');
+            mobileOverlay.classList.remove('show');
+            
+            // Reset icon
+            const icon = mobileMenuBtn.querySelector('i');
+            icon.className = 'fas fa-bars';
+        });
+        
+        // Close menu when clicking on sidebar links
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('open');
+                    mobileOverlay.classList.remove('show');
+                    
+                    // Reset icon
+                    const icon = mobileMenuBtn.querySelector('i');
+                    icon.className = 'fas fa-bars';
+                }
+            });
+        });
+        
+        // Close menu on window resize if screen becomes larger
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('open');
+                mobileOverlay.classList.remove('show');
+                
+                // Reset icon
+                const icon = mobileMenuBtn.querySelector('i');
+                icon.className = 'fas fa-bars';
+            }
+        });
+    }
+
     // Initialize tooltips
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
@@ -191,20 +247,87 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Add theme detection and switching
     function detectTheme() {
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (prefersDark) {
-            document.body.classList.add('dark-theme');
+        const savedTheme = localStorage.getItem('theme');
+        
+        if (savedTheme) {
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+                updateThemeIcon('dark');
+            } else {
+                document.body.classList.remove('dark-theme');
+                updateThemeIcon('light');
+            }
+        } else {
+            // Default to light mode
+            document.body.classList.remove('dark-theme');
+            updateThemeIcon('light');
+            localStorage.setItem('theme', 'light');
         }
+    }
+
+    function updateThemeIcon(theme) {
+        const themeIcon = document.getElementById('themeIcon');
+        if (themeIcon) {
+            if (theme === 'dark') {
+                themeIcon.className = 'fas fa-moon';
+            } else {
+                themeIcon.className = 'fas fa-sun';
+            }
+        }
+    }
+
+    // Theme toggle functionality
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', function() {
+            const isDark = document.body.classList.contains('dark-theme');
+            if (isDark) {
+                document.body.classList.remove('dark-theme');
+                localStorage.setItem('theme', 'light');
+                updateThemeIcon('light');
+            } else {
+                document.body.classList.add('dark-theme');
+                localStorage.setItem('theme', 'dark');
+                updateThemeIcon('dark');
+            }
+        });
     }
 
     detectTheme();
 
+    // Back to top functionality
+    const backToTopBtn = document.getElementById('backToTop');
+    if (backToTopBtn) {
+        backToTopBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Back to top clicked'); // Debug log
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Also add scroll event to show/hide button
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.style.display = 'block';
+            } else {
+                backToTopBtn.style.display = 'none';
+            }
+        });
+    }
+
     // Listen for theme changes
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-        if (e.matches) {
-            document.body.classList.add('dark-theme');
-        } else {
-            document.body.classList.remove('dark-theme');
+        const savedTheme = localStorage.getItem('theme');
+        if (!savedTheme) { // Only auto-switch if user hasn't manually set a preference
+            if (e.matches) {
+                document.body.classList.add('dark-theme');
+                updateThemeIcon('dark');
+            } else {
+                document.body.classList.remove('dark-theme');
+                updateThemeIcon('light');
+            }
         }
     });
 });

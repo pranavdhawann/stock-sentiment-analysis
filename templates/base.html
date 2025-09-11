@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}InfoEdge{% endblock %}</title>
+    <title>{% block title %}Stock Sentiment Analysis{% endblock %}</title>
     
     <!-- Google Fonts - Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -17,36 +17,69 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="{{ url_for('home') }}">
-                <i class="fas fa-chart-line me-2"></i>
-                InfoEdge
-            </a>
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+    
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-menu">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link" href="{{ url_for('home') }}">
+                        <i class="fas fa-home"></i>
+                        <span>HOME</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link" href="{{ url_for('about') }}">
+                        <i class="fas fa-info-circle"></i>
+                        <span>ABOUT</span>
+                    </a>
+                </li>
+            </ul>
             
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('home') }}">
-                            <i class="fas fa-home me-1"></i>Home
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('about') }}">
-                            <i class="fas fa-info-circle me-1"></i>About
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <button class="btn btn-outline-light btn-sm ms-2" id="themeToggle" title="Toggle Theme">
-                            <i class="fas fa-sun" id="themeIcon"></i>
+        </div>
+        
+        <!-- Market Cards Section (hidden by default) -->
+        <div class="sidebar-market-cards" id="sidebarMarketCards" style="display: none;">
+            <div class="market-cards-title">Market Overview</div>
+            <div class="market-cards-container" id="marketCardsContainer">
+                <!-- Market cards will be dynamically inserted here -->
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <!-- Market Location Selector -->
+            <div class="market-location-selector">
+                <div class="nav-item">
+                    <div class="market-location-switch">
+                        <button class="market-location-btn" id="marketLocationSwitch" type="button">
+                            <div class="flag-container">
+                                <span class="flag flag-us" data-country="US">🇺🇸</span>
+                                <span class="flag flag-in" data-country="IN">🇮🇳</span>
+                            </div>
+                            <div class="toggle-indicator" id="toggleIndicator"></div>
                         </button>
-                    </li>
-                </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-buttons">
+                <div class="back-to-top-widget" id="backToTop" title="Back to Top">
+                    <div class="back-to-top-toggle">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                </div>
+                <div class="theme-widget" id="themeToggle" title="Toggle Theme">
+                    <div class="theme-toggle">
+                        <i class="fas fa-sun" id="themeIcon"></i>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
@@ -57,18 +90,15 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-dark text-light py-4 mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center">
-                    <p class="mb-2"><small>Created by Pranav Dhawan</small></p>
-                    <p class="mb-0">
-                        <a href="https://github.com/pranavdhawann/stock-sentiment-analysis" target="_blank" class="text-light text-decoration-none">
-                            <i class="fab fa-github me-1"></i>View on GitHub
-                        </a>
-                    </p>
-                </div>
-            </div>
+    <footer class="footer-minimal">
+        <div class="footer-content">
+            <span>Created by Pranav Dhawan</span>
+            <span class="separator">|</span>
+            <a href="https://github.com/pranavdhawann/stock-sentiment-analysis" target="_blank">
+                <i class="fab fa-github"></i> View on GitHub
+            </a>
+            <span class="separator">|</span>
+            <span>© 2025 All Rights Reserved</span>
         </div>
     </footer>
 
