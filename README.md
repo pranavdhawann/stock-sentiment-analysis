@@ -126,15 +126,6 @@ gcloud run deploy stock-sentiment-app --source . --platform managed --region us-
 - Reliance, HDFC Bank, ICICI Bank
 - And many more...
 
-## 🔧 API Endpoints
-
-- `GET /` - Main application interface
-- `GET /about` - About page
-- `GET /health` - Health check endpoint
-- `POST /api/analyze_sentiment` - Analyze stock sentiment
-- `GET /api/search_stocks` - Search for stocks
-- `GET /api/get_default_markets` - Get market data
-
 ## 🎨 Customization
 
 ### Themes
@@ -163,28 +154,6 @@ To add support for new stocks, update the stock lists in `app.py`:
 ## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👨‍💻 Author
-
-**Pranav Dhawan**
-- GitHub: [@pranavdhawann](https://github.com/pranavdhawann)
-- LinkedIn: [Pranav Dhawan](https://linkedin.com/in/pranavdhawan)
-
-## 🙏 Acknowledgments
-
-- [VADER Sentiment](https://github.com/cjhutto/vaderSentiment) for sentiment analysis
-- [Chart.js](https://www.chartjs.org/) for interactive charts
-- [Bootstrap](https://getbootstrap.com/) for responsive design
-- [Font Awesome](https://fontawesome.com/) for icons
-- [Google Cloud](https://cloud.google.com/) for hosting
-
-## 📞 Support
-
-If you have any questions or need help, please:
-- Open an issue on GitHub
-- Contact the author via LinkedIn
-- Check the documentation
-
 ---
 
 ⭐ **Star this repository if you found it helpful!**
