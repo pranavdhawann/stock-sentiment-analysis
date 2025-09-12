@@ -1,4 +1,4 @@
-# 📈 Stock Sentiment Analysis Platform
+# 📈 INFOEDGE - Stock Sentiment Analysis Platform
 
 > **Advanced AI-powered sentiment analysis for global stock markets with real-time news insights and market intelligence**
 
